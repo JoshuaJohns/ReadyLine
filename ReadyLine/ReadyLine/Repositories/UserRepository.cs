@@ -11,6 +11,32 @@ namespace ReadyLine.Repositories
         public UserRepository(IConfiguration configuration) : base(configuration) { }
 
 
+
+        private User NewUserFromReader(SqlDataReader reader)
+        {
+            return new User()
+            {
+                Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                FirebaseUserId = reader.GetString(reader.GetOrdinal("FirebaseUserId")),
+                FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
+                LastName = reader.GetString(reader.GetOrdinal("LastName")),
+                Email = reader.GetString(reader.GetOrdinal("Email")),
+                ImageUrl = DbUtils.GetString(reader, "ImageUrl"),
+                CreatedDate = reader.GetDateTime(reader.GetOrdinal("CreatedDate")),
+                JobTitle = reader.GetString(reader.GetOrdinal("JobTitle")),
+                HireDate = DbUtils.GetNullableDateTime(reader, "HireDate"),
+                UserTypeId = reader.GetInt32(reader.GetOrdinal("UserTypeId")),
+                UserType = new UserType()
+                {
+                    Id = reader.GetInt32(reader.GetOrdinal("UTId")),
+                    Name = reader.GetString(reader.GetOrdinal("Name"))
+                },
+
+            };
+        }
+
+
+
         public List<User> GetAll()
         {
             using (var conn = Connection)
@@ -19,28 +45,27 @@ namespace ReadyLine.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-               SELECT up.Id, up.Name, up.Email, up.DateCreated AS UserProfileDateCreated,
-                      up.ImageUrl AS UserProfileImageUrl       
-                 FROM UserProfile up    
-             ORDER BY DateCreated
+               SELECT u.Id, u.FirebaseUserId, u.Email, u.CreatedDate, JobTitle,
+                      u.ImageUrl, u.HireDate, u.UserTypeId, u.FirstName, u.LastName,      
+
+                       ut.Id as UTId, ut.Name
+                 FROM [User] u  
+                 JOIN UserType ut on ut.Id = u.UserTypeId  
+             ORDER BY ut.Name
             ";
 
-                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    var reader = cmd.ExecuteReader();
+
+                    var users = new List<User>();
+
+                    while (reader.Read())
                     {
-
-                        var userProfiles = new List<User>();
-                        while (reader.Read())
-                        {
-                            userProfiles.Add(new User()
-                            {
-                                Id = DbUtils.GetInt(reader, "Id"),
-                               
-
-                            });
-                        }
-
-                        return userProfiles;
+                        users.Add(NewUserFromReader(reader));
                     }
+
+                    reader.Close();
+
+                    return users;
                 }
             }
         }
@@ -53,12 +78,13 @@ namespace ReadyLine.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        SELECT up.Id, Up.FirebaseUserId,up.Name, up.Email, up.DateCreated AS UserProfileDateCreated,
-                       up.ImageUrl AS UserProfileImageUrl, up.Id
+                      SELECT u.Id, u.FirebaseUserId, u.Email, u.CreatedDate, JobTitle
+                      u.ImageUrl, u.HireDate, u.UserTypeId, u.FirstName, u.LastName
                              
-                          FROM UserProfile up
+                          FROM [User] u
                                
-                         WHERE FirebaseUserId = @FirebaseuserId";
+                         WHERE FirebaseUserId = @FirebaseuserId
+                    ";
 
                     DbUtils.AddParameter(cmd, "@FirebaseUserId", firebaseUserId);
 
@@ -71,7 +97,7 @@ namespace ReadyLine.Repositories
                         {
                             Id = DbUtils.GetInt(reader, "Id"),
                             FirebaseUserId = DbUtils.GetString(reader, "FirebaseUserId"),
-                           
+
 
                         };
                     }
@@ -89,14 +115,15 @@ namespace ReadyLine.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                           SELECT 
-                       up.Name, up.Email, up.DateCreated AS UserProfileDateCreated,
-                       up.ImageUrl AS UserProfileImageUrl, up.Id
+                           SELECT u.Id, u.FirebaseUserId, u.Email, u.CreatedDate, JobTitle,
+                      u.ImageUrl, u.HireDate, u.UserTypeId, u.FirstName, u.LastName,      
+
+                       ut.Id as UTId, ut.Name
+                 FROM [User] u  
+                 JOIN UserType ut on ut.Id = u.UserTypeId 
                       
-                  FROM UserProfile up
-                      
-                    WHERE up.Id = @Id
-             ORDER BY  DateCreated
+                    WHERE u.Id = @Id
+            
                       
              
 ";
@@ -106,18 +133,13 @@ namespace ReadyLine.Repositories
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
 
-                        User profile = null;
+                        User user = null;
                         if (reader.Read())
                         {
-                            profile = new User()
-                            {
-
-                                Id = DbUtils.GetInt(reader, "Id"),
-                               
-                            };
+                            user = NewUserFromReader(reader);
                         }
 
-                        return profile;
+                        return user;
                     }
                 }
             }
@@ -131,22 +153,22 @@ namespace ReadyLine.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                    SELECT 
-                       up.Name, up.Email, up.DateCreated AS UserProfileDateCreated,
-                       up.ImageUrl AS UserProfileImageUrl,
+                                SELECT 
+                                   up.Name, up.Email, up.CreatedDate AS UserCreatedDate,
+                                   up.ImageUrl AS UserProfileImageUrl,
 
-                       v.Id AS VideoId, v.Title, v.Description, v.Url, 
-                       v.DateCreated AS VideoDateCreated, v.UserProfileId As VideoUserProfileId,
+                                   v.Id AS VideoId, v.Title, v.Description, v.Url, 
+                                   v.CreatedDate AS VideoCreatedDate, v.UserProfileId As VideoUserProfileId,
 
-                       c.Id AS CommentId, c.Message, c.UserProfileId AS CommentUserProfileId, c.VideoId as CommentVideoId
+                                   c.Id AS CommentId, c.Message, c.UserProfileId AS CommentUserProfileId, c.VideoId as CommentVideoId
 
-                   FROM UserProfile up
-                   JOIN Video v on v.UserProfileId = up.Id
-                   LEFT JOIN Comment c on c.VideoId = v.Id 
-                   WHERE up.Id = @ID
-                   ORDER BY  v.DateCreated
+                               FROM UserProfile up
+                               JOIN Video v on v.UserProfileId = up.Id
+                               LEFT JOIN Comment c on c.VideoId = v.Id 
+                               WHERE up.Id = @ID
+                               ORDER BY  v.CreatedDate
 
-";
+            ";
 
                     DbUtils.AddParameter(cmd, "@Id", id);
 
@@ -162,9 +184,9 @@ namespace ReadyLine.Repositories
                                 profile = new User()
                                 {
                                     Id = id,
-                                   
+
                                     Email = DbUtils.GetString(reader, "Email"),
-                                   
+
                                 };
 
                             }
@@ -176,7 +198,7 @@ namespace ReadyLine.Repositories
                                 //    Id = DbUtils.GetInt(reader, "VideoId"),
                                 //    Title = DbUtils.GetString(reader, "Title"),
                                 //    Description = DbUtils.GetString(reader, "Description"),
-                                //    DateCreated = DbUtils.GetDateTime(reader, "VideoDateCreated"),
+                                //    CreatedDate = DbUtils.GetDateTime(reader, "VideoCreatedDate"),
                                 //    Url = DbUtils.GetString(reader, "Url"),
                                 //    UserProfileId = DbUtils.GetInt(reader, "VideoUserProfileId"),
 
@@ -210,13 +232,20 @@ namespace ReadyLine.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        INSERT INTO UserProfile (FirebaseUserId,Email, ImageUrl, DateCreated, Name)
+                        INSERT INTO [User] (FirebaseUserId,Email, ImageUrl, CreatedDate, FirstName, LastName, HireDate, UserTypeId, JobTitle)
                         OUTPUT INSERTED.ID
-                        VALUES (@FirebaseUserId, @Email, @ImageUrl, @DateCreated, @Name)";
+                        VALUES (@FirebaseUserId, @Email, @ImageUrl, @CreatedDate, @FirstName, @LastName, @HireDate, @UserTypeId, @JobTitle)";
 
                     DbUtils.AddParameter(cmd, "@FirebaseUserId", profile.FirebaseUserId);
                     DbUtils.AddParameter(cmd, "@Email", profile.Email);
-                   
+                    DbUtils.AddParameter(cmd, "@ImageUrl", profile.ImageUrl);
+                    DbUtils.AddParameter(cmd, "@CreatedDate", profile.CreatedDate);
+                    DbUtils.AddParameter(cmd, "@FirstName", profile.FirstName);
+                    DbUtils.AddParameter(cmd, "@LastName", profile.LastName);
+                    DbUtils.AddParameter(cmd, "@HireDate", profile.HireDate);
+                    DbUtils.AddParameter(cmd, "@UserTypeId", profile.UserTypeId);
+                    DbUtils.AddParameter(cmd, "@JobTitle", profile.JobTitle);
+
 
                     profile.Id = (int)cmd.ExecuteScalar();
                 }
@@ -231,18 +260,27 @@ namespace ReadyLine.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        UPDATE UserProfile
+                        UPDATE [User]
                            SET Email = @Email,
                                ImageUrl = @ImageUrl,
-                               DateCreated = @DateCreated,
-                               Name = @Name
+                               CreatedDate = @CreatedDate,
+                               FirstName = @FirstName,
+                               LastName = @LastName,
+                               HireDate = @HireDate,
+                               UserTypeId = @UserTypeId,
+                               JobTitle = @JobTitle
                                 FirebaseUserId = @FirebaseUserId
-                         WHERE Id = @Id";
-                    DbUtils.AddParameter(cmd, "@Email", profile.Email);
-                   
-                    DbUtils.AddParameter(cmd, "@Id", profile.Id);
-                    DbUtils.AddParameter(cmd, "@FirebaseUserId", profile.FirebaseUserId);
 
+                         WHERE Id = @Id";
+                    DbUtils.AddParameter(cmd, "@FirebaseUserId", profile.FirebaseUserId);
+                    DbUtils.AddParameter(cmd, "@Email", profile.Email);
+                    DbUtils.AddParameter(cmd, "@ImageUrl", profile.ImageUrl);
+                    DbUtils.AddParameter(cmd, "@CreatedDate", profile.CreatedDate);
+                    DbUtils.AddParameter(cmd, "@FirstName", profile.FirstName);
+                    DbUtils.AddParameter(cmd, "@LastName", profile.LastName);
+                    DbUtils.AddParameter(cmd, "@HireDate", profile.HireDate);
+                    DbUtils.AddParameter(cmd, "@UserTypeId", profile.UserTypeId);
+                    DbUtils.AddParameter(cmd, "@JobTitle", profile.JobTitle);
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -255,7 +293,7 @@ namespace ReadyLine.Repositories
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "DELETE FROM UserProfile WHERE Id = @Id";
+                    cmd.CommandText = "DELETE FROM [User] WHERE Id = @Id";
                     DbUtils.AddParameter(cmd, "@id", id);
                     cmd.ExecuteNonQuery();
                 }

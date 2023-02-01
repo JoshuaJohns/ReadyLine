@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ReadyLine.Models;
 using ReadyLine.Repositories;
+using System;
 
 namespace ReadyLine.Controllers
 {
@@ -75,10 +76,13 @@ namespace ReadyLine.Controllers
 
 
         [HttpPost]
-        public IActionResult Post(User profile)
+        public IActionResult Post(User userProfile)
         {
-            _userRepository.Add(profile);
-            return CreatedAtAction("Get", new { id = profile.Id }, profile);
+            
+            userProfile.CreatedDate = DateTime.Now;
+            userProfile.UserTypeId = UserType.EMPLOYEE_ID;
+            _userRepository.Add(userProfile);
+            return CreatedAtAction("Get", new { id = userProfile.Id }, userProfile);
         }
 
         [HttpPut("{id}")]
