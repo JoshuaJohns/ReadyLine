@@ -32,6 +32,7 @@ namespace ReadyLine
 
             services.AddControllers();
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IReportRepository, ReportRepository>();
 
 
 

@@ -78,7 +78,7 @@ namespace ReadyLine.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                      SELECT u.Id, u.FirebaseUserId, u.Email, u.CreatedDate, JobTitle
+                      SELECT u.Id, u.FirebaseUserId, u.Email, u.CreatedDate, JobTitle,
                       u.ImageUrl, u.HireDate, u.UserTypeId, u.FirstName, u.LastName
                              
                           FROM [User] u
