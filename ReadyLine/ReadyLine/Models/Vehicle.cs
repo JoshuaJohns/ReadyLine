@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace ReadyLine.Models
 {
@@ -7,13 +8,14 @@ namespace ReadyLine.Models
         public int Id { get; set; }
 
         [Required]
-        public int vehicleTypeId { get; set; }
+        public int VehicleTypeId { get; set; }
 
         [Required]
-        public int MilageAtPMService { get; set; }
+        public int MileageAtPMService { get; set; }
+        public string ImageLocation { get; set; }
 
 
-        public int CurrentMilage { get; set; }
+        public int CurrentMileage { get; set; }
 
         [Required]
         public string VehicleNumber { get; set; }
@@ -29,7 +31,8 @@ namespace ReadyLine.Models
 
 
 
-
+        public VehivleType VehicleType { get; set; }
+        public List<Report> Reports { get; set; }
 
 
 

@@ -1,6 +1,8 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import ShopList from "../homePage/ShopList";
+import ReportsList from "../shopPage/ReportsList";
+import VehicleList from "../vehiclePage/VehicleList";
 import Login from "./Login";
 import Register from "./Register";
 
@@ -15,11 +17,14 @@ export default function ApplicationViews({ isLoggedIn }) {
                         index
                         element={isLoggedIn ? <ShopList /> : <Navigate to="/login" />}
                     />
-                    {/* <Route path="post">
-                        <Route index element={<PostList />} />
+                    <Route path="vehicle">
+                        <Route index element={<VehicleList />} />
 
+                    </Route>
+                    <Route path="report">
+                        <Route index element={<ReportsList />} />
 
-                    </Route> */}
+                    </Route>
 
                     <Route path="login" element={<Login />} />
                     <Route path="register" element={<Register />} />

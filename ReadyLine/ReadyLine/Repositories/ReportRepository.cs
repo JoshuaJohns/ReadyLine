@@ -26,24 +26,29 @@ namespace ReadyLine.Repositories
                 DateCompleted = DbUtils.GetNullableDateTime(reader, "DateCompleted"),
                 CategoryId = reader.GetInt32(reader.GetOrdinal("CategoryId")),
                 Tags = new List<Tag>(),
-                UserId = reader.GetInt32(reader.GetOrdinal("UserId")),
-                // User = new User()
-                // {
-                //     Id = reader.GetInt32(reader.GetOrdinal("Id")),
-                //     FirebaseUserId = reader.GetString(reader.GetOrdinal("FirebaseUserId")),
-                //     FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
-                //     LastName = reader.GetString(reader.GetOrdinal("LastName")),
-                //     Email = reader.GetString(reader.GetOrdinal("Email")),
-                //     ImageUrl = DbUtils.GetString(reader, "ImageUrl"),
-                // },
-                VehicleId = reader.GetInt32(reader.GetOrdinal("VehicleId")),
-                // Vehicle = new Vehicle()
-                // {
-                //     Id = reader.GetInt32(reader.GetOrdinal("Id")),
-                //     vehicleTypeId = reader.GetInt32(reader.GetOrdinal("vehicleTypeId")),
-                //     VehicleNumber = reader.GetString(reader.GetOrdinal("VehicleNumber")),
-
-                // }
+                
+                User = new User()
+                {
+                    Id = reader.GetInt32(reader.GetOrdinal("UserId")),
+                    FirebaseUserId = reader.GetString(reader.GetOrdinal("FirebaseUserId")),
+                    FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
+                    LastName = reader.GetString(reader.GetOrdinal("LastName")),
+                    Email = reader.GetString(reader.GetOrdinal("Email")),
+                    ImageUrl = DbUtils.GetString(reader, "ImageUrl"),
+                },
+                
+                Vehicle = new Vehicle()
+                {
+                    Id = reader.GetInt32(reader.GetOrdinal("VehicleId")),
+                    VehicleTypeId = reader.GetInt32(reader.GetOrdinal("vehicleTypeId")),
+                    VehicleNumber = reader.GetString(reader.GetOrdinal("VehicleNumber")),
+                    ImageLocation = reader.GetString(reader.GetOrdinal("ImageLocation")),
+                    CurrentMileage = reader.GetInt32(reader.GetOrdinal("CurrentMileage")),
+                    MileageAtPMService = reader.GetInt32(reader.GetOrdinal("MileageAtPMService")),
+                    IsApproved = reader.GetBoolean(reader.GetOrdinal("IsApproved")),
+                    IsClaimed = reader.GetBoolean(reader.GetOrdinal("IsClaimed")),
+                    IsInShop = reader.GetBoolean(reader.GetOrdinal("IsInShop")),
+                }
 
 
             };
@@ -60,9 +65,15 @@ namespace ReadyLine.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                       SELECT *
-                         FROM Report p
-                              
+                     SELECT r.Id, r.CategoryId, r.DateCompleted, r.DateCreated, r.Issue,
+		u.Id as UserId, u.Email, u.CreatedDate, u.FirebaseUserId, u.FirstName, u.HireDate, u.ImageUrl, u.JobTitle, u.LastName,
+		v.Id as VehicleId, v.CurrentMileage, v.ImageLocation, v.IsApproved, v.IsClaimed, v.IsInShop, v.MileageAtPMService, v.VehicleNumber, v.VehicleTypeId
+                    FROM Report r
+                    JOIN [User] u on u.Id =r.UserId
+                    JOIN Vehicle v on v.Id = r.VehicleId
+                    LEFT JOIN ReportTag rt on rt.ReportId = r.Id
+                    LEFT JOIN Tag t on t.Id = rt.TagId
+                    WHERE r.DateCompleted IS NULL
                     ";
 
                     var reader = cmd.ExecuteReader();

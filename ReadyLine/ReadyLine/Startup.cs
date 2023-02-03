@@ -33,7 +33,7 @@ namespace ReadyLine
             services.AddControllers();
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IReportRepository, ReportRepository>();
-
+            services.AddTransient<IVehicleRepository, VehicleRepository>();
 
 
             services.AddSwaggerGen(c =>

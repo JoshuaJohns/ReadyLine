@@ -1,0 +1,23 @@
+.vehiclePage-container {
+    display: flex;
+
+
+
+}
+
+
+
+.vehicle-img {
+    height: 130px;
+    width: 200px;
+}
+
+
+
+.vehicle-cardBody {
+    height: 150px;
+
+    display: flex;
+    justify-content: space-between;
+
+}
