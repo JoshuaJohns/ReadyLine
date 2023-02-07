@@ -1,6 +1,7 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import ShopList from "../homePage/ShopList";
+import { CreateReport } from "../shopPage/CreateReport";
 import ReportsList from "../shopPage/ReportsList";
 import VehicleList from "../vehiclePage/VehicleList";
 import Login from "./Login";
@@ -23,6 +24,7 @@ export default function ApplicationViews({ isLoggedIn }) {
                     </Route>
                     <Route path="report">
                         <Route index element={<ReportsList />} />
+                        <Route path="form" element={<CreateReport />} />
 
                     </Route>
 

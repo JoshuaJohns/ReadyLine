@@ -31,6 +31,7 @@ namespace ReadyLine.Repositories
                     Id = reader.GetInt32(reader.GetOrdinal("UTId")),
                     Name = reader.GetString(reader.GetOrdinal("Name"))
                 },
+                Vehicles = new List<Vehicle>()
 
             };
         }
@@ -78,10 +79,18 @@ namespace ReadyLine.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                      SELECT u.Id, u.FirebaseUserId, u.Email, u.CreatedDate, JobTitle,
-                      u.ImageUrl, u.HireDate, u.UserTypeId, u.FirstName, u.LastName
-                             
-                          FROM [User] u
+                       SELECT u.Id, u.FirebaseUserId, u.Email, u.CreatedDate, JobTitle,
+                      u.ImageUrl, u.HireDate, u.UserTypeId, u.FirstName, u.LastName,      
+
+                       ut.Id as UTId, ut.Name,
+                       cv.BeginDate, cv.EndDate, 
+                       v.Id as VId, v.ImageLocation, v.IsApproved, v.IsClaimed, v.IsInShop, v.MileageAtPMService, v.VehicleNumber, v.VehicleTypeId, v.CurrentMileage,
+                         vt.Id as VTId, vt.Name as VTName
+                 FROM [User] u  
+                 JOIN UserType ut on ut.Id = u.UserTypeId
+                 LEFT JOIN ClaimVehicle cv on cv.UserId = u.Id
+                 LEFT JOIN Vehicle v on v.Id = cv.VehicleId
+                  LEFT  JOIN VehicleType vt on vt.Id = v.VehicleTypeId
                                
                          WHERE FirebaseUserId = @FirebaseuserId
                     ";
@@ -91,18 +100,37 @@ namespace ReadyLine.Repositories
                     User userProfile = null;
 
                     var reader = cmd.ExecuteReader();
-                    if (reader.Read())
+                    while (reader.Read())
                     {
-                        userProfile = new User()
-                        {
-                            Id = DbUtils.GetInt(reader, "Id"),
-                            FirebaseUserId = DbUtils.GetString(reader, "FirebaseUserId"),
-
-
-                        };
+                    if (userProfile == null)
+                    {
+                        userProfile = NewUserFromReader(reader);
                     }
-                    reader.Close();
+                        if (DbUtils.IsNotDbNull(reader, "VId"))
+                        {
+                            userProfile.Vehicles.Add(new Vehicle()
+                            {
+                                MileageAtPMService = reader.GetInt32(reader.GetOrdinal("MileageAtPMService")),
+                                CurrentMileage = reader.GetInt32(reader.GetOrdinal("CurrentMileage")),
+                                VehicleNumber = reader.GetString(reader.GetOrdinal("VehicleNumber")),
+                                ImageLocation = reader.GetString(reader.GetOrdinal("ImageLocation")),
+                                IsApproved = reader.GetBoolean(reader.GetOrdinal("IsApproved")),
+                                IsClaimed = reader.GetBoolean(reader.GetOrdinal("IsClaimed")),
+                                IsInShop = reader.GetBoolean(reader.GetOrdinal("IsInShop")),
+                                VehicleTypeId = reader.GetInt32(reader.GetOrdinal("VehicleTypeId")),
+                                Reports = new List<Report>(),
+                                VehicleType = new VehicleType()
+                                {
+                                    Id = reader.GetInt32(reader.GetOrdinal("VTId")),
+                                    Name = reader.GetString(reader.GetOrdinal("VTName")),
 
+                                }
+                            });
+                        }
+
+                    }
+
+                    reader.Close();
                     return userProfile;
                 }
             }

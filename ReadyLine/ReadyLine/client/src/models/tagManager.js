@@ -1,10 +1,10 @@
 import { getToken } from "./authManager";
 
-const _reportUrl = "/api/report";
+const _tagUrl = "/api/tag";
 
-export const getAllReports = () => {
+export const getAllTags = () => {
     return getToken().then((token) => {
-        return fetch(`${_reportUrl}`, {
+        return fetch(`${_tagUrl}`, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -13,21 +13,21 @@ export const getAllReports = () => {
             if (res.ok) {
                 return res.json();
             } else {
-                throw new Error("An unknown error occurred while trying to get reports.");
+                throw new Error("An unknown error occurred while trying to get tags.");
             }
         });
     });
 };
 
-export const addReport = (report) => {
+export const addReportTag = (tagId, reportId) => {
     return getToken().then((token) => {
-        return fetch(_reportUrl, {
+        return fetch(`${_tagUrl}/reportTag`, {
             method: "POST",
             headers: {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(report),
+            body: JSON.stringify(tagId, reportId),
         }).then((resp) => {
             if (resp.ok) {
                 return resp.json();
@@ -35,7 +35,7 @@ export const addReport = (report) => {
                 throw new Error("Unauthorized");
             } else {
                 throw new Error(
-                    "An unknown error occurred while trying to add Report.",
+                    "An unknown error occurred while trying to add reportTag.",
                 );
             }
         });

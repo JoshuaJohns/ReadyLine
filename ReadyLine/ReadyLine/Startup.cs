@@ -33,6 +33,7 @@ namespace ReadyLine
             services.AddControllers();
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IReportRepository, ReportRepository>();
+            services.AddTransient<ITagRepository, TagRepository>();
             services.AddTransient<IVehicleRepository, VehicleRepository>();
 
 

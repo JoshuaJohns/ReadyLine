@@ -1,0 +1,16 @@
+.homePage-container {
+    display: flex;
+
+}
+
+.homePage-aside {
+    float: right;
+}
+
+.homePage-userInfo-Card {
+    width: auto;
+}
+
+.homePage-userCardBody {
+    float: right;
+}

@@ -7,5 +7,8 @@ namespace ReadyLine.Repositories
     {
         List<Vehicle> GetAllVehicles();
         Vehicle GetById(int id);
+        void Add(Vehicle vehicle);
+        List<VehicleType> GetAllVehicleTypes();
+        void DeleteVehicle(int id);
     }
 }

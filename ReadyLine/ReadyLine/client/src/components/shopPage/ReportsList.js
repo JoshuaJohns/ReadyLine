@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button, Card, CardBody } from "reactstrap";
 import { getAllReports } from "../../models/reportManager";
 import "./ShopPage.css"
@@ -10,6 +11,7 @@ const ReportsList = () => {
     const [reports, setReports] = useState([]);
     const [reportId, setReportId] = useState(null);
 
+    const navigate = useNavigate()
 
 
     //Get Methods
@@ -26,17 +28,22 @@ const ReportsList = () => {
 
 
 
-    return (<div className="shopPage-container">
+    return (<>
 
-
-
-        <div className="shopPage-reportsList-div">
+        <div className="shopPage-btns">
+            <Button color="dark" onClick={() => {
+                navigate(`/report/form`)
+            }}>
+                Submit a Vehicle
+            </Button>
+        </div>
+        <div className="shopPage-justAdded-div">
+            <h2>Just Added</h2>
             {reports.map((report) => {
                 {
-                    if (report.categoryId == 1) {
+                    if (report.categoryId == null) {
                         return <>
-                            <h2>Fast Lane</h2>
-                            <Card className="report-card" key={report.id}>
+                            <Card className="report-card" key={report.id} color="primary">
                                 <CardBody className="report-cardBody">
                                     <div className="shopPage-cardBody-div">
                                         <img className="report-img" src={report?.vehicle?.imageLocation} alt="image"></img>
@@ -68,44 +75,126 @@ const ReportsList = () => {
             })}
         </div>
 
-        <div>
 
-            {reports.map((report) => {
-                {
-                    if (report.categoryId == 2) {
-                        return <>
-                            <h2>Moderate</h2>
-                            <Card className="report-card" key={report.id}>
-                                <CardBody className="report-cardBody">
-                                    <img className="report-img" src={report?.vehicle?.imageLocation} alt="image"></img>
-                                    <p>{report?.vehicle?.vehicleNumber}</p>
-                                    <p>{report.issue}</p>
+        <div className="shopPage-container">
 
-                                    <p>{report.vehicleNumber}</p>
-                                    <Button color="dark" onClick={() => {
-                                        setReportId(report.id);
 
-                                        window.scrollTo({
-                                            top: 0,
-                                            left: 0,
-                                            behavior: 'smooth'
-                                        });
-                                    }}>
-                                        Show Details
-                                    </Button>
-                                </CardBody>
-                            </Card>
-                        </>
+
+            <div className="shopPage-reportsList-div">
+                <h2>Fast Lane</h2>
+                {reports.map((report) => {
+                    {
+                        if (report.categoryId == 1 && report?.vehicle?.isApproved == false) {
+                            return <>
+                                <Card className="report-card" key={report.id} color="primary">
+                                    <CardBody className="report-cardBody">
+                                        <div className="shopPage-cardBody-div">
+                                            <img className="report-img" src={report?.vehicle?.imageLocation} alt="image"></img>
+                                            <p>{report?.vehicle?.vehicleNumber}</p>
+                                            <p>{report.issue}</p>
+
+                                            <p>{report.vehicleNumber}</p>
+                                            <Button color="dark" onClick={() => {
+                                                setReportId(report.id);
+
+                                                window.scrollTo({
+                                                    top: 0,
+                                                    left: 0,
+                                                    behavior: 'smooth'
+                                                });
+                                            }}>
+                                                Show Details
+                                            </Button>
+                                        </div>
+                                    </CardBody>
+                                </Card>
+
+                            </>
+
+                        }
 
                     }
 
-                }
+                })}
+            </div>
 
-            })}
+            <div>
+
+                <h2>Moderate</h2>
+                {reports.map((report) => {
+                    {
+                        if (report.categoryId == 2 && report?.vehicle?.isApproved == false) {
+                            return <>
+                                <Card className="report-card" key={report.id} color="warning">
+                                    <CardBody className="report-cardBody">
+                                        <img className="report-img" src={report?.vehicle?.imageLocation} alt="image"></img>
+                                        <p>{report?.vehicle?.vehicleNumber}</p>
+                                        <p>{report.issue}</p>
+
+                                        <p>{report.vehicleNumber}</p>
+                                        <Button color="dark" onClick={() => {
+                                            setReportId(report.id);
+
+                                            window.scrollTo({
+                                                top: 0,
+                                                left: 0,
+                                                behavior: 'smooth'
+                                            });
+                                        }}>
+                                            Show Details
+                                        </Button>
+                                    </CardBody>
+                                </Card>
+                            </>
+
+                        }
+
+                    }
+
+                })}
+            </div>
+            <div>
+
+                <h2>Ready Line</h2>
+                {reports.map((report) => {
+                    {
+                        if (report.dateCompleted != null && report?.vehicle?.isApproved == true && report?.vehicle?.isInShop == true) {
+                            return <>
+                                <Card className="report-card" key={report.id} color="danger">
+                                    <CardBody className="report-cardBody">
+                                        <img className="report-img" src={report?.vehicle?.imageLocation} alt="image"></img>
+                                        <p>{report?.vehicle?.vehicleNumber}</p>
+                                        <p>{report.issue}</p>
+
+                                        <p>{report.vehicleNumber}</p>
+                                        <Button color="dark" onClick={() => {
+                                            setReportId(report.id);
+
+                                            window.scrollTo({
+                                                top: 0,
+                                                left: 0,
+                                                behavior: 'smooth'
+                                            });
+                                        }}>
+                                            Show Details
+                                        </Button>
+                                    </CardBody>
+                                </Card>
+                            </>
+
+                        }
+
+                    }
+
+                })}
+            </div>
+
+
         </div>
 
 
-    </div>)
+    </>)
+
 
 
 }

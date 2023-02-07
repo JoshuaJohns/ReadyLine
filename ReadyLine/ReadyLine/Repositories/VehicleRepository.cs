@@ -29,7 +29,7 @@ namespace ReadyLine.Repositories
                 IsInShop = reader.GetBoolean(reader.GetOrdinal("IsInShop")),
                 VehicleTypeId = reader.GetInt32(reader.GetOrdinal("VehicleTypeId")),
                 Reports = new List<Report>(),
-                VehicleType = new VehivleType()
+                VehicleType = new VehicleType()
                 {
                     Id = reader.GetInt32(reader.GetOrdinal("Id")),
                     Name = reader.GetString(reader.GetOrdinal("Name")),
@@ -76,6 +76,40 @@ namespace ReadyLine.Repositories
             }
         }
 
+        public List<VehicleType> GetAllVehicleTypes()
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                       SELECT *
+                         FROM VehicleType 
+                           
+                              
+                    ";
+
+                    var reader = cmd.ExecuteReader();
+
+                    var types = new List<VehicleType>();
+
+                    while (reader.Read())
+                    {
+                        types.Add(new VehicleType
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            Name = reader.GetString(reader.GetOrdinal("Name")),
+                        }
+                        );
+                    }
+
+                    reader.Close();
+
+                    return types;
+                }
+            }
+        }
 
         public Vehicle GetById(int id)
         {
@@ -102,18 +136,18 @@ namespace ReadyLine.Repositories
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
 
-                        Vehicle video = null;
+                        Vehicle vehicle = null;
                         while (reader.Read())
                         {
-                            if (video == null)
+                            if (vehicle == null)
                             {
-                            video = NewVehicleFromReader(reader);
+                                vehicle = NewVehicleFromReader(reader);
 
                             }
 
                             if (DbUtils.IsNotDbNull(reader, "ReportId"))
-                                {
-                                video.Reports.Add(
+                            {
+                                vehicle.Reports.Add(
                                 new Report
                                 {
                                     Id = reader.GetInt32(reader.GetOrdinal("Id")),
@@ -139,19 +173,60 @@ namespace ReadyLine.Repositories
                                     //     vehicleTypeId = reader.GetInt32(reader.GetOrdinal("vehicleTypeId")),
                                     //     VehicleNumber = reader.GetString(reader.GetOrdinal("VehicleNumber")),
                                 });
-                                }
+                            }
 
                         }
 
-                        return video;
+                        return vehicle;
                     }
                 }
             }
         }
 
+        public void Add(Vehicle vehicle)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        INSERT INTO Vehicle (CurrentMileage, ImageLocation, IsApproved, IsClaimed, IsInShop, MileageAtPMService, VehicleNumber, VehicleTypeId)
+                        OUTPUT INSERTED.ID
+                        VALUES (@CurrentMileage, @ImageLocation, @IsApproved, @IsClaimed, @IsInShop, @MileageAtPMService, @VehicleNumber, @VehicleTypeId )";
 
+                    DbUtils.AddParameter(cmd, "@CurrentMileage", vehicle.CurrentMileage);
+                    DbUtils.AddParameter(cmd, "@ImageLocation", vehicle.ImageLocation);
+                    DbUtils.AddParameter(cmd, "@IsApproved", vehicle.IsApproved);
+                    DbUtils.AddParameter(cmd, "@IsClaimed", vehicle.IsClaimed);
+                    DbUtils.AddParameter(cmd, "@IsInShop", vehicle.IsInShop);
+                    DbUtils.AddParameter(cmd, "@MileageAtPMService", vehicle.MileageAtPMService);
+                    DbUtils.AddParameter(cmd, "@VehicleNumber", vehicle.VehicleNumber);
+                    DbUtils.AddParameter(cmd, "@VehicleTypeId", vehicle.VehicleTypeId);
 
+                    vehicle.Id = (int)cmd.ExecuteScalar();
+                }
+            }
+        }
 
+        public void DeleteVehicle(int id)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        DELETE FROM Vehicle 
+                        WHERE Vehicle.Id = @id
+                    ";
+                    cmd.Parameters.AddWithValue("@id", id);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
 
 
 

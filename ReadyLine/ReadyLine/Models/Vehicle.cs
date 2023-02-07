@@ -31,7 +31,7 @@ namespace ReadyLine.Models
 
 
 
-        public VehivleType VehicleType { get; set; }
+        public VehicleType VehicleType { get; set; }
         public List<Report> Reports { get; set; }
 
 

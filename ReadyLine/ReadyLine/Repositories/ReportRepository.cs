@@ -26,7 +26,7 @@ namespace ReadyLine.Repositories
                 DateCompleted = DbUtils.GetNullableDateTime(reader, "DateCompleted"),
                 CategoryId = reader.GetInt32(reader.GetOrdinal("CategoryId")),
                 Tags = new List<Tag>(),
-                
+
                 User = new User()
                 {
                     Id = reader.GetInt32(reader.GetOrdinal("UserId")),
@@ -36,7 +36,7 @@ namespace ReadyLine.Repositories
                     Email = reader.GetString(reader.GetOrdinal("Email")),
                     ImageUrl = DbUtils.GetString(reader, "ImageUrl"),
                 },
-                
+
                 Vehicle = new Vehicle()
                 {
                     Id = reader.GetInt32(reader.GetOrdinal("VehicleId")),
@@ -91,6 +91,45 @@ namespace ReadyLine.Repositories
                 }
             }
         }
+
+        public void Add(Report report)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        INSERT INTO [Report] (UserId,VehicleId, Issue, CategoryId, DateCreated, DateCompleted)
+                        OUTPUT INSERTED.ID
+                        VALUES (@UserId, @VehicleId, @Issue, @CategoryId, @DateCreated, @DateCompleted)";
+
+                    DbUtils.AddParameter(cmd, "@UserId", report.UserId);
+                    DbUtils.AddParameter(cmd, "@VehicleId", report.VehicleId);
+                    DbUtils.AddParameter(cmd, "@Issue", report.Issue);
+                    DbUtils.AddParameter(cmd, "@CategoryId", report.CategoryId);
+                    DbUtils.AddParameter(cmd, "@DateCreated", report.DateCreated);
+                    DbUtils.AddParameter(cmd, "@DateCompleted", report.DateCompleted);
+                    report.Id = (int)cmd.ExecuteScalar();
+                }
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     }
 }

@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { Card, CardTitle, CardSubtitle, CardBody, CardText } from "reactstrap";
-import { getVehicleById } from "../../models/vehicleManager";
+import { Card, CardTitle, CardSubtitle, CardBody, CardText, Button } from "reactstrap";
+import { deleteVehicle, getVehicleById } from "../../models/vehicleManager";
 
 
-export default function VehicleDetails({ vehicleId }) {
+export default function VehicleDetails({ vehicleId, setAddedVehicle }) {
     const [vehicle, setVehicle] = useState(null)
 
     const getVehicleDetails = (id) => {
@@ -16,7 +16,7 @@ export default function VehicleDetails({ vehicleId }) {
         }
     }, [vehicleId])
 
-    if (!vehicle) {
+    if (!vehicle || vehicleId == 0) {
         return (
             <>
                 <h2>Vehicle Details</h2>
@@ -34,7 +34,17 @@ export default function VehicleDetails({ vehicleId }) {
                     </CardTitle>
                     <p>Vehicle #: {vehicle.vehicleNumber}</p>
                     <p>Current Mileage: {vehicle.currentMileage}</p>
-                    <p>Color: {vehicle.color}</p>
+                    <p>Mileage Since Last PM Service: {vehicle.currentMileage - vehicle.mileageAtPMService}</p>
+                    <Button color="light" onClick={() => {
+                        deleteVehicle(vehicle.id).then(() => {
+                            window.alert(`Vehicle ${vehicle.vehicleNumber} deleted succesfuly`)
+                            setAddedVehicle(true)
+                            vehicleId = 0
+                        })
+
+                    }}>
+                        Delete Vehicle
+                    </Button>
                 </CardBody>
             </Card>
             <h4>Work Order History</h4>
@@ -47,7 +57,7 @@ export default function VehicleDetails({ vehicleId }) {
                         Completed: {report.dateCompleted ? report.dateCompleted.split('T')[0] : 'Open'}
                     </CardSubtitle>
                     <CardText>
-                        Description: {report.issue}
+                        Issue: {report.issue}
                     </CardText>
                 </CardBody>
             </Card>)}

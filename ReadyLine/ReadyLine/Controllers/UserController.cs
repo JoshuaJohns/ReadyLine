@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using ReadyLine.Models;
 using ReadyLine.Repositories;
 using System;
+using System.Security.Claims;
 
 namespace ReadyLine.Controllers
 {
@@ -42,6 +43,7 @@ namespace ReadyLine.Controllers
             return Ok();
         }
 
+
         [HttpGet]
         public IActionResult Get()
         {
@@ -49,8 +51,21 @@ namespace ReadyLine.Controllers
         }
 
 
+        [HttpGet("currentUser")]
+        public IActionResult GetCurrentUserInfo()
+        {
+            var firebaseUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var user = _userRepository.GetByFirebaseUserId(firebaseUserId);
 
-        [HttpGet("{id}")]
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return Ok(user);
+        }
+
+
+            [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
             var profile = _userRepository.GetById(id);
@@ -81,6 +96,10 @@ namespace ReadyLine.Controllers
             
             userProfile.CreatedDate = DateTime.Now;
             userProfile.UserTypeId = UserType.EMPLOYEE_ID;
+            if (userProfile.ImageUrl == null)
+            {
+                userProfile.ImageUrl = "https://beardstrashservice.com/wp-content/uploads/2023/01/Logo-637x266.gif";
+            }
             _userRepository.Add(userProfile);
             return CreatedAtAction("Get", new { id = userProfile.Id }, userProfile);
         }

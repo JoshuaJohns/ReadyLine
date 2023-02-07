@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace ReadyLine.Models
 {
@@ -17,5 +18,6 @@ namespace ReadyLine.Models
         public int UserTypeId { get; set; }
 
         public UserType UserType { get; set; }
+        public List<Vehicle> Vehicles { get; set; }
     }
 }

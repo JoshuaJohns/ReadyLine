@@ -55,7 +55,7 @@ export default function Register() {
                     <Label htmlFor="hireDate">Hire Date</Label>
                     <Input
                         id="hireDate"
-                        type="text"
+                        type="date"
                         onChange={(e) => setHireDate(e.target.value)}
                     />
                 </FormGroup>
