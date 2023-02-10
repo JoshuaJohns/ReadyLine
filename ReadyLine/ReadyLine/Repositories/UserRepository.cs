@@ -110,6 +110,7 @@ namespace ReadyLine.Repositories
                         {
                             userProfile.Vehicles.Add(new Vehicle()
                             {
+                                Id = reader.GetInt32(reader.GetOrdinal("VId")),
                                 MileageAtPMService = reader.GetInt32(reader.GetOrdinal("MileageAtPMService")),
                                 CurrentMileage = reader.GetInt32(reader.GetOrdinal("CurrentMileage")),
                                 VehicleNumber = reader.GetString(reader.GetOrdinal("VehicleNumber")),

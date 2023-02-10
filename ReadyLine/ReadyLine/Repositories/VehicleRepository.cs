@@ -182,6 +182,45 @@ namespace ReadyLine.Repositories
                 }
             }
         }
+        public ClaimVehicle GetClaimById(int vehicleId, int userId)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        SELECT 
+                           *
+                         FROM ClaimVehicle c
+                    WHERE c.UserId = @userId AND c.VehicleId = @vehicleId
+                      
+             
+";
+
+                    DbUtils.AddParameter(cmd, "@vehicleId", vehicleId);
+                    DbUtils.AddParameter(cmd, "@userId", userId);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+
+                        ClaimVehicle claim = null;
+                        if (reader.Read())
+                        {
+                            claim = new ClaimVehicle()
+                            {
+                                Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                                VehicleId = reader.GetInt32(reader.GetOrdinal("VehicleId")),
+                                UserId = reader.GetInt32(reader.GetOrdinal("UserId")),
+                            };
+
+                        }
+
+                        return claim;
+                    }
+                }
+            }
+        }
 
         public void Add(Vehicle vehicle)
         {
@@ -209,6 +248,27 @@ namespace ReadyLine.Repositories
             }
         }
 
+        public void AddClaim(ClaimVehicle claim)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        INSERT INTO ClaimVehicle (VehicleId, UserId, BeginDate, EndDate)
+                        OUTPUT INSERTED.ID
+                        VALUES (@VehicleId, @UserId, @BeginDate, @EndDate )";
+
+                    DbUtils.AddParameter(cmd, "@VehicleId", claim.VehicleId);
+                    DbUtils.AddParameter(cmd, "@UserId", claim.UserId);
+                    DbUtils.AddParameter(cmd, "@BeginDate", claim.BeginDate);
+                    DbUtils.AddParameter(cmd, "@EndDate", claim.EndDate);
+                    claim.Id = (int)cmd.ExecuteScalar();
+                }
+            }
+        }
+
         public void DeleteVehicle(int id)
         {
             using (SqlConnection conn = Connection)
@@ -227,7 +287,58 @@ namespace ReadyLine.Repositories
                 }
             }
         }
+        public void DeleteClaim(int id)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
 
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        DELETE FROM ClaimVehicle 
+                        WHERE ClaimVehicle.Id = @id
+                    ";
+                    cmd.Parameters.AddWithValue("@id", id);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+        public void Update(Vehicle vehicle)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        UPDATE [Vehicle]
+                           SET CurrentMileage = @CurrentMileage,
+                               ImageLocation = @ImageLocation,
+                               IsApproved = @IsApproved,
+                               IsClaimed = @IsClaimed,
+                               IsInShop = @IsInShop,
+                               MileageAtPMService = @MileageAtPMService,
+                               VehicleNumber = @VehicleNumber,
+                               VehicleTypeId = @VehicleTypeId
+                                
+
+                         WHERE Id = @Id";
+
+                    DbUtils.AddParameter(cmd, "@CurrentMileage", vehicle.CurrentMileage);
+                    DbUtils.AddParameter(cmd, "@Id", vehicle.Id);
+                    DbUtils.AddParameter(cmd, "@ImageLocation", vehicle.ImageLocation);
+                    DbUtils.AddParameter(cmd, "@IsApproved", vehicle.IsApproved);
+                    DbUtils.AddParameter(cmd, "@IsClaimed", vehicle.IsClaimed);
+                    DbUtils.AddParameter(cmd, "@IsInShop", vehicle.IsInShop);
+                    DbUtils.AddParameter(cmd, "@MileageAtPMService", vehicle.MileageAtPMService);
+                    DbUtils.AddParameter(cmd, "@VehicleNumber", vehicle.VehicleNumber);
+                    DbUtils.AddParameter(cmd, "@VehicleTypeId", vehicle.VehicleTypeId);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
 
 
 

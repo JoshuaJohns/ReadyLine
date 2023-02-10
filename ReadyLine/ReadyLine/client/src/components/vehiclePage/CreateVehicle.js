@@ -143,7 +143,7 @@ export const CreateVehicle = ({ setNewVehicle, setAddedVehicle }) => {
             <button
                 onClick={() => setNewVehicle(false)}
                 className="btn-primary">
-                Cancle
+                Cancel
             </button>
 
 

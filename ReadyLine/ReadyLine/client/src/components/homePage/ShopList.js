@@ -1,38 +1,187 @@
 import React, { useEffect, useState } from "react";
-import { Button, Card, CardBody, CardImg, CardImgOverlay, CardText, Fade, Pagination, PaginationItem, PaginationLink } from "reactstrap";
+import { Button, Card, CardBody, CardImg, CardImgOverlay, CardText, Table, } from "reactstrap";
 import { getAllReports } from "../../models/reportManager";
 import { getCurrentUserInfo } from "../../models/userManager";
+import { deleteClaim, getAllVehicles, putVehicle, putVehicleIsInShop } from "../../models/vehicleManager";
 import "./HomePage.css"
 
 const ShopList = () => {
-    const [reports, setReports] = useState([]);
+    const [vehicles, setVehicles] = useState([]);
+    const [filteredVehicles, setfilteredVehicles] = useState([]);
     const [user, setUser] = useState([]);
+    const [authorized, setAuthorized] = useState(false);
 
     //Get Methods
-    const getPosts = () => {
-        getAllReports().then(reports => setReports(reports));
+    const getVehicles = () => {
+        getAllVehicles().then(vehicles => setVehicles(vehicles));
     }
     const getUser = () => {
-        getCurrentUserInfo().then(reports => setUser(reports));
+        getCurrentUserInfo().then((user) => {
+            setUser(user)
+            if (user.userTypeId == 2) {
+                setAuthorized(true)
+            }
+
+        });
     }
 
     /*--------------------------------------------------------------*/
     //useEffect Methods
     useEffect(() => {
-        getPosts();
+        getVehicles();
         getUser();
     }, []);
 
 
 
+    /*----------------------------------Buttons----------------------------------------------------*/
+    const handleUpdateButton = (event, vehicle) => {
+        event.preventDefault()
+
+        return putVehicleIsInShop(vehicle.id, vehicle)
+            .then((res) => {
+                getVehicles()
+            })
+    }
+
+
+
+
+    //Grab onlt vehicles that are ready for pick up
+    let filtered = vehicles.filter(p => p.isApproved == true && p.isInShop == true)
+
+    //Get number of vehicles
+    let count = 0
+    filtered.map((vehicle) => {
+        count++
+    })
+
 
     return (<>
 
-        <aside className="homePage-aside">
+        {
+            authorized
+
+                ?
+                <>
+                    <div className="homePage-readyLine-div">
+                        <div className="homePage-count-div">
+                            <h1>Ready Line</h1>  <h3 className="homePage-count-h3">Count: {count}</h3>
+
+                        </div>
+                        <Table className="vehiclePage-table">
+                            <thead className="homePage-shopList-thead">
+                                <tr>
+                                    <th></th>
+                                    <th>Img</th>
+                                    <th>Type</th>
+                                    <th>Vehicle Number</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+
+                                {
+                                    filtered.map((vehicle) => {
+                                        return <tr className="vehicle-tr" key={vehicle.id}>
+                                            <th className="vehicle-th" scope="row">
+
+                                            </th>
+                                            <td>
+                                                <img className="vehicle-img" src={vehicle.imageLocation} alt="image"></img>
+
+                                            </td>
+                                            <td>
+                                                <p>{vehicle?.vehicleType?.name}</p>
+
+                                            </td>
+
+                                            <td>
+                                                <p>{vehicle.vehicleNumber}</p>
+
+                                            </td>
+                                            <td>
+                                                <Button color="success" onClick={(clickEvent) => {
+                                                    handleUpdateButton(clickEvent, vehicle);
+                                                }}>
+                                                    Vehicle Picked Up
+                                                </Button>
+                                            </td>
+                                            {/* <td>
+                                                <Button color="dark" onClick={() => {
+
+
+                                                    window.scrollTo({
+                                                        top: 0,
+                                                        left: 0,
+                                                        behavior: 'smooth'
+                                                    });
+                                                }}>
+                                                    Show Details
+                                                </Button>
+
+                                            </td> */}
+                                            <td></td>
+
+                                        </tr>
+
+                                    })}
+                            </tbody>
+
+                        </Table>
+
+                    </div>
+
+                </>
+                :
+                <>
+                    <h2>Your Vehicle(s)...</h2>
+                    <div className="vehiclePage-container">
+                        <div className="homePage-shopList-div">
+                            {user?.vehicles?.map((vehicle) => {
+                                return <Card className="vehicle-card" key={vehicle.id}>
+                                    <CardBody className="vehicle-cardBody">
+                                        <img className="vehicle-img" src={vehicle.imageLocation} alt="image"></img>
+                                        <p>{vehicle?.vehicleType?.name}</p>
+                                        {
+                                            vehicle.isClaimed
+                                                ? <p>Yes</p> : <p>No</p>
+                                        }
+                                        <p>{vehicle.vehicleNumber}</p>
+                                        <Button color="danger" onClick={(clickEvent) => {
+
+                                        }}>
+                                            UnClaim
+                                        </Button>
+                                        <Button color="dark" onClick={() => {
+
+
+                                            window.scrollTo({
+                                                top: 0,
+                                                left: 0,
+                                                behavior: 'smooth'
+                                            });
+                                        }}>
+                                            Show Details
+                                        </Button>
+                                    </CardBody>
+                                </Card>
+
+                            })}
+                        </div>
+                    </div>
+
+                </>
+
+
+        }
 
 
 
-        </aside>
+
         <div className="homePage-container">
 
             <Card inverse className="homePage-userInfo-Card">
@@ -72,37 +221,6 @@ const ShopList = () => {
 
 
 
-
-        <h2>Your Vehicle(s)...</h2>
-        <div className="vehiclePage-container">
-            <div className="homePage-shopList-div">
-                {user?.vehicles?.map((vehicle) => {
-                    return <Card className="vehicle-card" key={vehicle.id}>
-                        <CardBody className="vehicle-cardBody">
-                            <img className="vehicle-img" src={vehicle.imageLocation} alt="image"></img>
-                            <p>{vehicle?.vehicleType?.name}</p>
-                            {
-                                vehicle.isClaimed
-                                    ? <p>Yes</p> : <p>No</p>
-                            }
-                            <p>{vehicle.vehicleNumber}</p>
-                            <Button color="dark" onClick={() => {
-
-
-                                window.scrollTo({
-                                    top: 0,
-                                    left: 0,
-                                    behavior: 'smooth'
-                                });
-                            }}>
-                                Show Details
-                            </Button>
-                        </CardBody>
-                    </Card>
-
-                })}
-            </div>
-        </div>
 
     </>)
 

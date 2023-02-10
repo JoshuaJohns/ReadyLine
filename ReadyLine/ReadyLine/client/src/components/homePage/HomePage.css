@@ -14,3 +14,18 @@
 .homePage-userCardBody {
     float: right;
 }
+
+.homePage-readyLine-div {
+    float: right;
+
+}
+
+.homePage-count-div {
+    display: flex;
+    justify-content: space-around;
+
+}
+
+.homePage-count-h3 {
+    margin-top: 10px;
+}

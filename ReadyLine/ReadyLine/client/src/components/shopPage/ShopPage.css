@@ -1,5 +1,7 @@
 .shopPage-container {
     display: flex;
+    justify-content: space-around;
+    /* background-image: url("/images/body1.jpeg"); */
 }
 
 
@@ -7,5 +9,25 @@
 .report-img {
     height: 130px;
     width: 200px;
+
+}
+
+
+.shopPage-justAdded-div {
+    margin: 100px;
+    margin-top: 30px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.report-card {
+    width: 250px;
+    margin: 5px;
+    background-color: rgb(6, 6, 89);
+
+}
+
+.report-card-fast {
+    color: blue;
 
 }

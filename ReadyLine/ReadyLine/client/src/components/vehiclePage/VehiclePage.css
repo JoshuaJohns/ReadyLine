@@ -5,7 +5,12 @@
 
 }
 
-
+.vehiclePage-details-div {
+    float: right;
+    width: 400px;
+    margin: 50px;
+    margin-top: 0;
+}
 
 .vehicle-img {
     height: 130px;
@@ -20,4 +25,8 @@
     display: flex;
     justify-content: space-between;
 
+}
+
+.vehiclePage-p-claimed {
+    color: rgb(192, 3, 3);
 }

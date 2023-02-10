@@ -21,13 +21,12 @@ export const getAllTags = () => {
 
 export const addReportTag = (tagId, reportId) => {
     return getToken().then((token) => {
-        return fetch(`${_tagUrl}/reportTag`, {
+        return fetch(`${_tagUrl}/${tagId}/${reportId}`, {
             method: "POST",
             headers: {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(tagId, reportId),
         }).then((resp) => {
             if (resp.ok) {
                 return resp.json();

@@ -24,9 +24,10 @@ namespace ReadyLine.Controllers
         }
 
 
-        [HttpPost("reportTag")]
+        [HttpPost("{tagId}/{reportId}")]
         public IActionResult Post(int tagId, int reportId)
         {
+
             var reportTag = new ReportTag();
             reportTag.TagId = tagId;
             reportTag.ReportId = reportId;

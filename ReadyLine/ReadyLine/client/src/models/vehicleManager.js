@@ -61,6 +61,29 @@ export const addVehicle = (vehicle) => {
         });
     });
 };
+export const addClaim = (claim) => {
+    return getToken().then((token) => {
+        return fetch(`${_vehicleUrl}/claimVehicle`, {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(claim),
+        }).then((resp) => {
+            if (resp.ok) {
+                return resp.json();
+            } else if (resp.status === 401) {
+                throw new Error("Unauthorized");
+            } else {
+                throw new Error(
+                    "An unknown error occurred while trying to add claim.",
+                );
+            }
+        });
+    });
+};
+
 export const deleteVehicle = (id) => {
     return getToken().then((token) => {
         return fetch(`${_vehicleUrl}/${id}`, {
@@ -72,3 +95,62 @@ export const deleteVehicle = (id) => {
         })
     });
 };
+export const deleteClaim = (id) => {
+    return getToken().then((token) => {
+        return fetch(`${_vehicleUrl}/claim/${id}`, {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+            }
+        })
+    });
+};
+
+
+export const putVehicle = (id, vehicle) => {
+    return getToken().then((token) => {
+        return fetch(`${_vehicleUrl}/${id}`, {
+            method: "PUT",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(vehicle)
+        })
+            .then((res) => {
+                if (res.ok) {
+                    return res.json();
+                } else if (res.status === 401) {
+                    throw new Error("Unauthorized");
+                } else {
+                    throw new Error(
+                        "An unknown error occurred while trying to put vehicle.",
+                    );
+                }
+            });
+    });
+}
+export const putVehicleIsInShop = (id, vehicle) => {
+    return getToken().then((token) => {
+        return fetch(`${_vehicleUrl}/pickup/${id}`, {
+            method: "PUT",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(vehicle)
+        })
+            .then((res) => {
+                if (res.ok) {
+                    return res.json();
+                } else if (res.status === 401) {
+                    throw new Error("Unauthorized");
+                } else {
+                    throw new Error(
+                        "An unknown error occurred while trying to put vehicle.IsInSop.",
+                    );
+                }
+            });
+    });
+}

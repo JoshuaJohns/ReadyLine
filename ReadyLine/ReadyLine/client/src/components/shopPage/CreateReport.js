@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { Form, FormGroup, Input, Label } from "reactstrap";
 import { addReport } from "../../models/reportManager";
 import { addReportTag, getAllTags } from "../../models/tagManager";
-import { addVehicle, getAllVehicles, getAllVehicleTypes, getVehicleById } from "../../models/vehicleManager";
+import { getAllVehicles } from "../../models/vehicleManager";
+import "./ShopPage.css"
 
 
 
@@ -19,7 +20,7 @@ export const CreateReport = () => {
 
     })
 
-
+    const navigate = useNavigate()
 
 
     const getVehicles = () => {
@@ -39,25 +40,22 @@ export const CreateReport = () => {
     const handleSubmitButton = (event) => {
         event.preventDefault()
 
-
-
-
         const reportToSendToAPI = {
             issue: userChoices.issue,
             vehicleId: userChoices.vehicleId
 
         }
 
-
         return addReport(reportToSendToAPI)
             .then((res) => {
                 userChoices?.tagIds?.map((tagId) => {
                     return addReportTag(tagId, res.id)
-                        .then((res) => {
+                        .then(() => {
 
-                            window.alert(`Report has been succesfuly submitted :)`)
                         })
                 })
+                window.alert(`Report has been succesfuly submitted :)`)
+                navigate('/report')
             })
     }
 
@@ -72,10 +70,11 @@ export const CreateReport = () => {
                     for="exampleSelect"
                     sm={2}
                 >
-                    Select
+                    Select Vehicle
                 </Label>
                 <Input
                     type="select"
+
                     value={userChoices.vehicleId}
                     onChange={
                         (evt) => {
@@ -83,9 +82,9 @@ export const CreateReport = () => {
                             copy.vehicleId = parseInt((evt.target.value))
                             update(copy)
                         }}
-                >
+                > <option>Choose By Vehicle Number</option>
                     {vehicles.map((vehicle) => {
-                        if (vehicle.isApproved == true && vehicle.isInShop == false)
+                        if (vehicle.isApproved == true)
                             return <option key={vehicle.id} value={vehicle.id}>
                                 {vehicle.vehicleNumber}--
                                 {vehicle?.vehicleType?.name}

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Card, CardBody } from "reactstrap";
+import { Button, Card, CardBody, Popover, PopoverHeader, PopoverBody, CardTitle } from "reactstrap";
 import { getAllReports } from "../../models/reportManager";
+import ReportDetails from "./ReportDetails";
 import "./ShopPage.css"
 
 
@@ -37,30 +38,32 @@ const ReportsList = () => {
                 Submit a Vehicle
             </Button>
         </div>
+
+
+        <h2>Just Added</h2>
         <div className="shopPage-justAdded-div">
-            <h2>Just Added</h2>
             {reports.map((report) => {
                 {
-                    if (report.categoryId == null) {
+                    if (report.categoryId == 4) {
                         return <>
-                            <Card className="report-card" key={report.id} color="primary">
+                            <Card className="report-card" key={report.id} color="light">
+                                <h3> #{report.id}</h3>
                                 <CardBody className="report-cardBody">
                                     <div className="shopPage-cardBody-div">
                                         <img className="report-img" src={report?.vehicle?.imageLocation} alt="image"></img>
                                         <p>{report?.vehicle?.vehicleNumber}</p>
-                                        <p>{report.issue}</p>
+                                        <h4>Tags:</h4>
+                                        <ul>{report?.tags?.map((tag) => {
+                                            return <>
+                                                <li>{tag.status}</li>
+                                            </>
+                                        })}</ul>
 
                                         <p>{report.vehicleNumber}</p>
                                         <Button color="dark" onClick={() => {
-                                            setReportId(report.id);
-
-                                            window.scrollTo({
-                                                top: 0,
-                                                left: 0,
-                                                behavior: 'smooth'
-                                            });
+                                            navigate(`/report/details/${report.id}`)
                                         }}>
-                                            Show Details
+                                            Report Details
                                         </Button>
                                     </div>
                                 </CardBody>
@@ -77,34 +80,32 @@ const ReportsList = () => {
 
 
         <div className="shopPage-container">
-
-
-
             <div className="shopPage-reportsList-div">
                 <h2>Fast Lane</h2>
                 {reports.map((report) => {
                     {
                         if (report.categoryId == 1 && report?.vehicle?.isApproved == false) {
                             return <>
-                                <Card className="report-card" key={report.id} color="primary">
+                                <Card className="report-card-fast" key={report.id} color="light" >
+                                    <CardTitle > <h3> #{report.id}</h3> </CardTitle>
                                     <CardBody className="report-cardBody">
                                         <div className="shopPage-cardBody-div">
                                             <img className="report-img" src={report?.vehicle?.imageLocation} alt="image"></img>
                                             <p>{report?.vehicle?.vehicleNumber}</p>
-                                            <p>{report.issue}</p>
-
+                                            <h4>Tags:</h4>
+                                            <ul>{report?.tags?.map((tag) => {
+                                                return <>
+                                                    <li>{tag.status}</li>
+                                                </>
+                                            })}</ul>
                                             <p>{report.vehicleNumber}</p>
-                                            <Button color="dark" onClick={() => {
-                                                setReportId(report.id);
 
-                                                window.scrollTo({
-                                                    top: 0,
-                                                    left: 0,
-                                                    behavior: 'smooth'
-                                                });
+                                            <Button color="dark" onClick={() => {
+                                                navigate(`/report/details/${report.id}`)
                                             }}>
-                                                Show Details
+                                                Report Details
                                             </Button>
+
                                         </div>
                                     </CardBody>
                                 </Card>
@@ -126,22 +127,22 @@ const ReportsList = () => {
                         if (report.categoryId == 2 && report?.vehicle?.isApproved == false) {
                             return <>
                                 <Card className="report-card" key={report.id} color="warning">
+                                    <h3> #{report.id}</h3>
                                     <CardBody className="report-cardBody">
                                         <img className="report-img" src={report?.vehicle?.imageLocation} alt="image"></img>
                                         <p>{report?.vehicle?.vehicleNumber}</p>
-                                        <p>{report.issue}</p>
+                                        <h4>Tags:</h4>
+                                        <ul>{report?.tags?.map((tag) => {
+                                            return <>
+                                                <li>{tag.status}</li>
+                                            </>
+                                        })}</ul>
 
                                         <p>{report.vehicleNumber}</p>
                                         <Button color="dark" onClick={() => {
-                                            setReportId(report.id);
-
-                                            window.scrollTo({
-                                                top: 0,
-                                                left: 0,
-                                                behavior: 'smooth'
-                                            });
+                                            navigate(`/report/details/${report.id}`)
                                         }}>
-                                            Show Details
+                                            Report Details
                                         </Button>
                                     </CardBody>
                                 </Card>
@@ -160,23 +161,22 @@ const ReportsList = () => {
                     {
                         if (report.dateCompleted != null && report?.vehicle?.isApproved == true && report?.vehicle?.isInShop == true) {
                             return <>
-                                <Card className="report-card" key={report.id} color="danger">
+                                <Card className="report-card" key={report.id} color="success">
+                                    <h3> #{report.id}</h3>
                                     <CardBody className="report-cardBody">
                                         <img className="report-img" src={report?.vehicle?.imageLocation} alt="image"></img>
                                         <p>{report?.vehicle?.vehicleNumber}</p>
-                                        <p>{report.issue}</p>
-
+                                        <h4>Tags:</h4>
+                                        <ul>{report?.tags?.map((tag) => {
+                                            return <>
+                                                <li>{tag.status}</li>
+                                            </>
+                                        })}</ul>
                                         <p>{report.vehicleNumber}</p>
                                         <Button color="dark" onClick={() => {
-                                            setReportId(report.id);
-
-                                            window.scrollTo({
-                                                top: 0,
-                                                left: 0,
-                                                behavior: 'smooth'
-                                            });
+                                            navigate(`/report/details/${report.id}`)
                                         }}>
-                                            Show Details
+                                            Report Details
                                         </Button>
                                     </CardBody>
                                 </Card>
