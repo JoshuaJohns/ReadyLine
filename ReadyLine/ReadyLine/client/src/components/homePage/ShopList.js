@@ -3,6 +3,7 @@ import { Button, Card, CardBody, CardImg, CardImgOverlay, CardText, Table, } fro
 import { getAllReports } from "../../models/reportManager";
 import { getCurrentUserInfo } from "../../models/userManager";
 import { deleteClaim, getAllVehicles, putVehicle, putVehicleIsInShop } from "../../models/vehicleManager";
+import EmployeeList from "./EmployeeList";
 import "./HomePage.css"
 
 const ShopList = () => {
@@ -205,6 +206,8 @@ const ShopList = () => {
                         <CardText className="homePage-userLi"></CardText>
                     </CardBody>
 
+
+
                     <img
                         alt="Card cap"
                         src={user.imageUrl}
@@ -215,6 +218,7 @@ const ShopList = () => {
                 </CardImgOverlay>
             </Card>
 
+            <EmployeeList />
 
         </div>
 

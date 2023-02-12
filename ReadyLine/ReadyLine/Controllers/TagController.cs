@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ReadyLine.Models;
 using ReadyLine.Repositories;
@@ -7,6 +8,7 @@ using System;
 namespace ReadyLine.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class TagController : ControllerBase
     {

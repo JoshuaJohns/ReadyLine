@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ReadyLine.Models;
 using ReadyLine.Repositories;
@@ -8,6 +9,7 @@ using System.Security.Claims;
 namespace ReadyLine.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class VehicleController : ControllerBase
     {

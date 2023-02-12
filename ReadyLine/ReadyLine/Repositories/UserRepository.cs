@@ -145,11 +145,17 @@ namespace ReadyLine.Repositories
                 {
                     cmd.CommandText = @"
                            SELECT u.Id, u.FirebaseUserId, u.Email, u.CreatedDate, JobTitle,
-                      u.ImageUrl, u.HireDate, u.UserTypeId, u.FirstName, u.LastName,      
+                      u.ImageUrl, u.HireDate, u.UserTypeId, u.FirstName, u.LastName,   
+                         ut.Id as UTId, ut.Name,
+                       cv.BeginDate, cv.EndDate, 
+                       v.Id as VId, v.ImageLocation, v.IsApproved, v.IsClaimed, v.IsInShop, v.MileageAtPMService, v.VehicleNumber, v.VehicleTypeId, v.CurrentMileage,
+                         vt.Id as VTId, vt.Name as VTName
 
-                       ut.Id as UTId, ut.Name
                  FROM [User] u  
                  JOIN UserType ut on ut.Id = u.UserTypeId 
+                  LEFT JOIN ClaimVehicle cv on cv.UserId = u.Id
+                 LEFT JOIN Vehicle v on v.Id = cv.VehicleId
+                  LEFT  JOIN VehicleType vt on vt.Id = v.VehicleTypeId
                       
                     WHERE u.Id = @Id
             
@@ -159,17 +165,43 @@ namespace ReadyLine.Repositories
 
                     DbUtils.AddParameter(cmd, "@Id", id);
 
-                    using (SqlDataReader reader = cmd.ExecuteReader())
-                    {
+                    User userProfile = null;
 
-                        User user = null;
-                        if (reader.Read())
+                    var reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        if (userProfile == null)
                         {
-                            user = NewUserFromReader(reader);
+                            userProfile = NewUserFromReader(reader);
+                        }
+                        if (DbUtils.IsNotDbNull(reader, "VId"))
+                        {
+                            userProfile.Vehicles.Add(new Vehicle()
+                            {
+                                Id = reader.GetInt32(reader.GetOrdinal("VId")),
+                                MileageAtPMService = reader.GetInt32(reader.GetOrdinal("MileageAtPMService")),
+                                CurrentMileage = reader.GetInt32(reader.GetOrdinal("CurrentMileage")),
+                                VehicleNumber = reader.GetString(reader.GetOrdinal("VehicleNumber")),
+                                ImageLocation = reader.GetString(reader.GetOrdinal("ImageLocation")),
+                                IsApproved = reader.GetBoolean(reader.GetOrdinal("IsApproved")),
+                                IsClaimed = reader.GetBoolean(reader.GetOrdinal("IsClaimed")),
+                                IsInShop = reader.GetBoolean(reader.GetOrdinal("IsInShop")),
+                                VehicleTypeId = reader.GetInt32(reader.GetOrdinal("VehicleTypeId")),
+                                Reports = new List<Report>(),
+                                VehicleType = new VehicleType()
+                                {
+                                    Id = reader.GetInt32(reader.GetOrdinal("VTId")),
+                                    Name = reader.GetString(reader.GetOrdinal("VTName")),
+
+                                }
+                            });
                         }
 
-                        return user;
                     }
+
+                    reader.Close();
+                    return userProfile;
+
                 }
             }
         }

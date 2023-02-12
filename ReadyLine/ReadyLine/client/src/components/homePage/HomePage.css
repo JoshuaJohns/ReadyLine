@@ -1,5 +1,6 @@
 .homePage-container {
     display: flex;
+    flex-wrap: wrap;
 
 }
 
@@ -28,4 +29,34 @@
 
 .homePage-count-h3 {
     margin-top: 10px;
+}
+
+/*---------------------------------Employee List-------------------------------------------*/
+
+.homePage-user-img {
+    height: 50px;
+    width: 50px;
+}
+
+/*---------------------------------User Detail-------------------------------------------*/
+
+.userDetails-user-img {
+    height: 200px;
+    width: 200px;
+}
+
+.userDetails-userInfo-Card {
+    display: flex;
+}
+
+.userDetails-userCardImg {
+    width: 400px;
+}
+
+.userDetails-userCardBody {
+    font-size: 24px;
+}
+
+.userDetails-cardOverlay {
+    text-align: center;
 }

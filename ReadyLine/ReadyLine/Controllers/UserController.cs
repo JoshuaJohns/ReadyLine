@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ReadyLine.Models;
 using ReadyLine.Repositories;
@@ -8,6 +9,8 @@ using System.Security.Claims;
 namespace ReadyLine.Controllers
 {
     [Route("api/[controller]")]
+  
+
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -45,7 +48,7 @@ namespace ReadyLine.Controllers
 
 
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult GetAll()
         {
             return Ok(_userRepository.GetAll());
         }
@@ -65,7 +68,7 @@ namespace ReadyLine.Controllers
         }
 
 
-            [HttpGet("{id}")]
+            [HttpGet("userInfo/{id}")]
         public IActionResult Get(int id)
         {
             var profile = _userRepository.GetById(id);

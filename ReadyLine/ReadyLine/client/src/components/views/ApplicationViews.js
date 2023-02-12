@@ -1,6 +1,7 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import ShopList from "../homePage/ShopList";
+import UserDetails from "../homePage/UserDetails";
 import { CreateReport } from "../shopPage/CreateReport";
 import ReportDetails from "../shopPage/ReportDetails";
 import ReportsList from "../shopPage/ReportsList";
@@ -19,6 +20,8 @@ export default function ApplicationViews({ isLoggedIn }) {
                         index
                         element={isLoggedIn ? <ShopList /> : <Navigate to="/login" />}
                     />
+                    <Route path="user/:id" element={<UserDetails />} />
+
                     <Route path="vehicle">
                         <Route index element={<VehicleList />} />
 
