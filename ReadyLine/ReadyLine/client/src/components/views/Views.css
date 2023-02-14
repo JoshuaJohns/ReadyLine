@@ -1,0 +1,38 @@
+/*----------------------------Login---------------------------*/
+.login-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.login {
+    width: 600px;
+    background-color: rgba(28, 29, 29, 0.285);
+    padding: 50px;
+    display: flex;
+    justify-content: space-around;
+    margin-top: 100px;
+
+}
+
+
+
+/*----------------------------NavBar---------------------------*/
+
+
+.navbar {
+    background-color: rgba(227, 228, 232, 0.964);
+    height: 65px;
+    font-weight: 700;
+    color: aliceblue !important;
+    font-size: 20px;
+}
+
+.navBrand {
+    font-size: 30px;
+    color: rgba(213, 217, 220, 0.975);
+}
+
+.navLink {
+    margin-left: 20px;
+    color: rgba(213, 217, 220, 0.975);
+}

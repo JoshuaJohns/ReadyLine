@@ -60,99 +60,111 @@ export const CreateReport = () => {
     }
 
     return (
+        <div className="createReport-container">
 
-        <Form className="videoForm">
-            <h2 className="videoForm__Vehicle Number">Submit a Vehicle to the Shop</h2>
-
-
-            <FormGroup row>
-                <Label
-                    for="exampleSelect"
-                    sm={2}
-                >
-                    Select Vehicle
-                </Label>
-                <Input
-                    type="select"
-
-                    value={userChoices.vehicleId}
-                    onChange={
-                        (evt) => {
-                            const copy = { ...userChoices }
-                            copy.vehicleId = parseInt((evt.target.value))
-                            update(copy)
-                        }}
-                > <option>Choose By Vehicle Number</option>
-                    {vehicles.map((vehicle) => {
-                        if (vehicle.isApproved == true)
-                            return <option key={vehicle.id} value={vehicle.id}>
-                                {vehicle.vehicleNumber}--
-                                {vehicle?.vehicleType?.name}
-                                {/* <img className="report-img" src={vehicle.imageLocation} alt="image"></img> */}
-                            </option>
-                    })}
-                </Input>
-            </FormGroup>
+            <Form className="createReport-form">
+                <h2 className="createReport-h2">Submit a Vehicle to the Shop</h2>
 
 
-            <FormGroup>
-                <div className="form-group">
-                    <label htmlFor="issue">Describe the Issue(s):</label>
-                    <input
-                        required autoFocus
-                        type="text"
-                        className="form-control"
-                        placeholder="issue"
-                        value={userChoices.issue}
+                <FormGroup className="createReport-formGroup">
+                    <Label
+                        className="createReport-label"
+                        for="exampleSelect"
+                        sm={2}
+                    >
+                        Vehicle#
+                    </Label>
+                    <Input
+                        type="select"
+
+                        value={userChoices.vehicleId}
                         onChange={
                             (evt) => {
                                 const copy = { ...userChoices }
-                                copy.issue = (evt.target.value)
+                                copy.vehicleId = parseInt((evt.target.value))
                                 update(copy)
-                            }
-                        } />
-                </div>
-            </FormGroup>
+                            }}
+                    > <option>Select By Vehicle Number</option>
+                        {vehicles.map((vehicle) => {
+                            if (vehicle.isApproved == true)
+                                return <option key={vehicle.id} value={vehicle.id}>
+                                    {vehicle.vehicleNumber}--
+                                    {vehicle?.vehicleType?.name}
+
+                                </option>
+                        })}
+                    </Input>
+                </FormGroup>
 
 
-            <FormGroup check>
-                {tags.map((tag) => {
-                    return <Label check key={tag.id}>
-                        <Input
-                            type="checkbox"
-                            checked={userChoices?.tags?.includes(tag.id)}
+                <FormGroup className="createReport-formGroup-issue">
+                    <div className="form-group">
+                        <label htmlFor="issue">Describe the Issue(s):</label>
+                        <input
+                            required autoFocus
+                            type="text"
+                            className="form-control"
+                            placeholder="issue"
+                            value={userChoices.issue}
                             onChange={
                                 (evt) => {
-                                    if (evt.target.checked) {
-                                        const copy = structuredClone(userChoices)
-                                        copy?.tagIds?.push(tag.id)
-                                        update(copy)
-                                    } else {
-                                        const copy = structuredClone(userChoices)
-                                        copy.tagIds = copy?.tagIds?.filter(id => id !== tag.id)
-                                        update(copy)
-                                    }
-
-
+                                    const copy = { ...userChoices }
+                                    copy.issue = (evt.target.value)
+                                    update(copy)
                                 }
                             } />
-                        {tag.status}
-                    </Label>
-
-                })}
-            </FormGroup>
+                    </div>
+                </FormGroup>
 
 
+                <FormGroup check className="createReport-formGroup-checkBox">
+                    {tags.map((tag) => {
+                        return <div className="createReport-div-checkBox">
+                            <Label className="createReport-label-checkBox" check key={tag.id}>
+                                <Input
+                                    className="createReport-input-checkBox"
+                                    type="checkbox"
+                                    checked={userChoices?.tags?.includes(tag.id)}
+                                    onChange={
+                                        (evt) => {
+                                            if (evt.target.checked) {
+                                                const copy = structuredClone(userChoices)
+                                                copy?.tagIds?.push(tag.id)
+                                                update(copy)
+                                            } else {
+                                                const copy = structuredClone(userChoices)
+                                                copy.tagIds = copy?.tagIds?.filter(id => id !== tag.id)
+                                                update(copy)
+                                            }
 
-            <button
-                onClick={(clickEvent) => handleSubmitButton(clickEvent)}
-                className="btn-primary">
-                Submit Vehicle
-            </button>
+
+                                        }
+                                    } />
+                                {tag.status}
+                            </Label>
+
+                        </div>
+
+                    })}
+                </FormGroup>
 
 
 
-        </Form>
+                <button
+                    onClick={(clickEvent) => handleSubmitButton(clickEvent)}
+                    className="btn-primary">
+                    Submit Vehicle
+                </button>
+                <button
+                    onClick={(clickEvent) => navigate("/report")}
+                    className="btn-primary">
+                    Cancle
+                </button>
+
+
+
+            </Form>
+        </div>
     )
 
 }

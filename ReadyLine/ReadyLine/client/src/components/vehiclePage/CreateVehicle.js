@@ -47,15 +47,15 @@ export const CreateVehicle = ({ setNewVehicle, setAddedVehicle }) => {
     }
 
     return (
-        <form className="videoForm">
-            <h2 className="videoForm__Vehicle Number">Adding a New Vehicle</h2>
+        <form className="vehicleAddForm">
+            <h2 className="vehicleAddForm-h2">Adding a New Vehicle</h2>
 
 
 
 
             <fieldset>
                 <div className="form-group">
-                    <label htmlFor="vehicleNumber">Vehicle Number:</label>
+                    <label htmlFor="vehicleNumber" className="vehicleAdd-label">Vehicle Number:</label>
                     <input
                         required autoFocus
                         type="string"
@@ -73,11 +73,10 @@ export const CreateVehicle = ({ setNewVehicle, setAddedVehicle }) => {
             </fieldset>
             <fieldset>
                 <div className="form-group">
-
+                    <h3 className="vehicleAdd-label">Vehicle Type:</h3>
                     {types.map((type) => {
                         return <div key={type.id} className="radio">
 
-                            <label className="label-name">{type.name}  </label>
                             <input
 
                                 type="radio"
@@ -91,13 +90,14 @@ export const CreateVehicle = ({ setNewVehicle, setAddedVehicle }) => {
                                     }
                                 }
                             />
+                            <label className="vehicleAdd-radioLabel">{type.name}  </label>
                         </div>
                     })}
                 </div>
             </fieldset>
             <fieldset>
                 <div className="form-group">
-                    <label htmlFor="mileageAtPMService">Mileage at Last PM Service:</label>
+                    <label className="vehicleAdd-label" htmlFor="mileageAtPMService">Mileage at Last PM Service:</label>
                     <input
 
                         type="number"
@@ -115,7 +115,7 @@ export const CreateVehicle = ({ setNewVehicle, setAddedVehicle }) => {
             </fieldset>
             <fieldset>
                 <div className="form-group">
-                    <label htmlFor="currentMileage">Current Mileage:</label>
+                    <label className="vehicleAdd-label" htmlFor="currentMileage">Current Mileage:</label>
                     <input
                         required autoFocus
                         type="number"

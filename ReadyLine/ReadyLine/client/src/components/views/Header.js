@@ -10,6 +10,7 @@ import {
     NavLink,
 } from "reactstrap";
 import { logout } from "../../models/authManager";
+import "./Views.css"
 
 
 export default function Header({ isLoggedIn }) {
@@ -18,8 +19,8 @@ export default function Header({ isLoggedIn }) {
 
     return (
         <div>
-            <Navbar color="light" light expand="md">
-                <NavbarBrand tag={RRNavLink} to="/">
+            <Navbar className="navbar" light expand="md">
+                <NavbarBrand className="navBrand" tag={RRNavLink} to="/">
                     Ready Line
                 </NavbarBrand>
                 <NavbarToggler onClick={toggle} />
@@ -28,19 +29,19 @@ export default function Header({ isLoggedIn }) {
                         {/* When isLoggedIn === true, we will render the Home link */}
                         {isLoggedIn && (
                             <>
-                                <NavItem>
-                                    <NavLink tag={RRNavLink} to="/">
+                                <NavItem >
+                                    <NavLink className="navLink" tag={RRNavLink} to="/">
                                         Home
                                     </NavLink>
                                 </NavItem>
 
                                 <NavItem>
-                                    <NavLink tag={RRNavLink} to="vehicle">
+                                    <NavLink className="navLink" tag={RRNavLink} to="vehicle">
                                         Vehicles
                                     </NavLink>
                                 </NavItem>
                                 <NavItem>
-                                    <NavLink tag={RRNavLink} to="report">
+                                    <NavLink className="navLink" tag={RRNavLink} to="report">
                                         Shop
                                     </NavLink>
                                 </NavItem>
@@ -56,9 +57,10 @@ export default function Header({ isLoggedIn }) {
                     <Nav navbar>
                         {isLoggedIn && (
                             <>
-                                <NavItem>
+                                <NavItem className="navLink" >
                                     <a
                                         aria-current="page"
+
                                         className="nav-link"
                                         style={{ cursor: "pointer" }}
                                         onClick={logout}

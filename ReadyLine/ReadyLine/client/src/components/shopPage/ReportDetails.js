@@ -5,6 +5,7 @@ import { getReportById } from "../../models/reportManager";
 import { getCurrentUserInfo } from "../../models/userManager";
 import { deleteVehicle, getVehicleById } from "../../models/vehicleManager";
 import { ChangeReportCategory } from "./ChangeReportCategory";
+import "./ShopPage.css"
 
 
 export default function ReportDetails() {
@@ -22,7 +23,7 @@ export default function ReportDetails() {
     const getUser = () => {
         getCurrentUserInfo().then((user) => {
             setUser(user)
-            if (user.userTypeId == 2) {
+            if (user.userTypeId == 3) {
                 setAuthorized(true)
             }
 
@@ -41,26 +42,29 @@ export default function ReportDetails() {
 
     const mileageSincePM = report?.vehicle?.currentMileage - report?.vehicle?.mileageAtPMService
 
-    return <>
+    return <div className="reportDetails-container">
 
-        <Card>
+        <Card className="reportDetails-card">
             <h3>Report #{report.id}</h3>
             <CardTitle>
                 {report?.vehicle?.vehicleNumber}--
                 {report?.category?.stage}
             </CardTitle>
-            <img className="report-img" src={report?.vehicle?.imageLocation} alt="image"></img>
+            <img className="reportDetails-img" src={report?.vehicle?.imageLocation} alt="image"></img>
             <CardBody>
-                <CardText>Submitted By: {report?.user?.firstName} {report?.user?.lastName}</CardText>
 
-                <CardText>Mileage Since Last PM Service: {mileageSincePM}mi</CardText>
-                <CardText>Current Mileage: {report?.vehicle?.currentMileage}mi</CardText>
-                <CardText>{report.issue}</CardText>
+                <CardText><b>Mileage Since Last PM Service:</b> {mileageSincePM}mi</CardText>
+                <CardText><b>Current Mileage:</b> {report?.vehicle?.currentMileage}mi</CardText>
+                <CardText><b> Submitted By:</b> {report?.user?.firstName} {report?.user?.lastName}</CardText>
+                <h5><b>Issue:</b></h5>
+                <CardText className="reportDetails-issue">{report.issue}</CardText>
                 <h3>Tags</h3>
+                <ul>
+                    {report?.tags?.map((tag) => {
+                        return <li>{tag.status}</li>
+                    })}
 
-                {report?.tags?.map((tag) => {
-                    return <CardText>{tag.status}</CardText>
-                })}
+                </ul>
             </CardBody>
 
 
@@ -84,14 +88,14 @@ export default function ReportDetails() {
 
 
                     }}>
-                        Change Status
+                        Change Category
                     </Button>
 
 
             }
 
 
-            <Button color="dark" onClick={() => {
+            <Button color="dark" className="reportDetails-goBack-btn" onClick={() => {
                 navigate("/report")
             }}>
                 Go Back
@@ -99,5 +103,5 @@ export default function ReportDetails() {
         </Card>
 
 
-    </>
+    </div>
 }

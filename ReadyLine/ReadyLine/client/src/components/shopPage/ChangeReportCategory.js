@@ -44,7 +44,7 @@ export const ChangeReportCategory = ({ setNewVehicle, setAddedVehicle, report })
 
     return (
         <form className="videoForm">
-            <h2 className="videoForm__Vehicle Number">Change Status</h2>
+            <h2 className="videoForm__Vehicle Number">Change Category</h2>
 
 
 
@@ -54,11 +54,11 @@ export const ChangeReportCategory = ({ setNewVehicle, setAddedVehicle, report })
                     for="exampleSelect"
                     sm={2}
                 >
-                    Select Category
+
                 </Label>
                 <Input
                     type="select"
-
+                    required
                     value={userChoices.categoryId}
                     onChange={
                         (evt) => {
@@ -66,7 +66,7 @@ export const ChangeReportCategory = ({ setNewVehicle, setAddedVehicle, report })
                             copy.categoryId = parseInt((evt.target.value))
                             update(copy)
                         }}
-                > <option>Choose Category</option>
+                > <option>Select Category</option>
                     {categories.map((category) => {
                         if (category.stage !== "new")
                             return <option key={category.id} value={category.id}>

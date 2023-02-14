@@ -1,7 +1,10 @@
+/*---------------------------------Usser Profile-------------------------------------------*/
+
 .homePage-container {
     display: flex;
     flex-wrap: wrap;
-
+    margin-top: 30px;
+    padding-left: 20px;
 }
 
 .homePage-aside {
@@ -9,11 +12,21 @@
 }
 
 .homePage-userInfo-Card {
-    width: auto;
+    width: 769px;
+    margin-top: 18px;
+    margin-bottom: 30px;
 }
 
 .homePage-userCardBody {
     float: right;
+    margin-right: 180px;
+    margin-top: 20px;
+    font-size: 22px;
+}
+
+.hompage-userImg {
+    border-radius: 80px;
+    margin-left: 30px;
 }
 
 .homePage-readyLine-div {
@@ -29,34 +42,197 @@
 
 .homePage-count-h3 {
     margin-top: 10px;
+
 }
 
-/*---------------------------------Employee List-------------------------------------------*/
+/*---------------------------------Your Vehicle-------------------------------------------*/
+.homePage-vehicle-card {
+    margin-bottom: 10px;
+    margin-right: 60px;
+    padding-left: 20px;
+}
 
-.homePage-user-img {
-    height: 50px;
-    width: 50px;
+.homePage-vehicle-cardBody {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+}
+
+.homePage-vehicle-pmService {
+    color: rgb(206, 180, 7);
+    font-weight: 600;
+}
+
+.homePage-vehicle-img {
+    height: 200px;
+    max-width: 400px;
+}
+
+.homePage-vehicle-p {
+    margin: 20px;
+}
+
+
+
+
+
+
+
+
+/*---------------------------------Ready line List-------------------------------------------*/
+.homePage-readyLine-container {
+    display: flex;
+    flex-direction: column;
+    float: right;
+
+}
+
+.homePage-count-div {
+    display: flex;
+    justify-content: space-between;
+
+}
+
+.homePage-shopList-div {
+    padding: 30px;
+    padding-left: 80px;
+    background-color: rgba(103, 103, 103, 0.29);
+    border-radius: 12px;
+}
+
+.homePage-count-h3 {
+    margin-left: 100px;
+    margin-right: 20px;
+}
+
+.homePage-readyLine-div {
+    margin-right: 40px;
+    font-size: 20px;
+
+}
+
+.homePage-readyLine-table {
+    /* background-color: rgba(16, 16, 16, 0.568); */
+    background-color: rgba(103, 103, 103, 0.29);
+
+}
+
+.home-readyLine-tr {
+    margin-top: 20px;
+    padding-top: 100px;
+
+}
+
+.home-readyLine-img {
+    height: 100px;
+    margin-right: 15px;
+    width: 160px;
+}
+
+.home-readyLine-type {
+    padding-top: 27px;
+    margin-left: 10px;
+    font-weight: 500;
+    font-size: 20px;
+}
+
+.home-readyLine-number {
+    padding-top: 27px;
+    margin-left: 20px;
+    font-weight: 500;
+    font-size: 20px;
+}
+
+.home-readyLine-pickedUp {
+    margin: 22px;
+
+}
+
+.homePage-edit-vehicle {
+    margin-top: 10px;
+}
+
+
+/*---------------------------------Employee List-------------------------------------------*/
+.homePage-employeeList-Container {}
+
+.homePage-userList-img {
+    height: 70px;
+    width: 70px;
+}
+
+.user-tr {
+    font-size: 20px;
+
+}
+
+.homePage-userList-td {
+    margin-left: 20px;
+    background-color: antiquewhite;
+}
+
+.homePage-userList-basic {
+    color: rgb(206, 180, 7);
+    font-weight: 500;
+}
+
+.homePage-userList-admin {
+    color: rgb(40, 192, 6);
+    font-weight: 500;
 }
 
 /*---------------------------------User Detail-------------------------------------------*/
-
-.userDetails-user-img {
-    height: 200px;
-    width: 200px;
-}
-
-.userDetails-userInfo-Card {
+.userDetails-container {
     display: flex;
+    justify-content: space-around;
+    padding-top: 40px;
+    background-color: rgba(24, 53, 53, 0.273);
+    height: auto;
+    min-height: 1200px;
 }
 
-.userDetails-userCardImg {
-    width: 400px;
+.userDetails-subContainer {}
+
+.userDetails-cardOverlay {
+    text-align: center;
 }
 
 .userDetails-userCardBody {
     font-size: 24px;
+
 }
 
-.userDetails-cardOverlay {
-    text-align: center;
+.userDetails-userCardBackgroundImg {
+    min-height: 600px;
+}
+
+.userDetails-userInfo-Card {
+    max-width: 1000px;
+
+
+}
+
+.userDetails-userCardImg {
+    padding-top: 20px;
+    height: 200px;
+    width: 200px;
+}
+
+.userDetails-userInfo-Card {}
+
+/*-----------------------------------edit Vehicle-----------------------------------*/
+.editVehicle-container {
+    display: flex;
+    justify-content: space-around;
+    padding-top: 80px;
+    height: auto;
+
+}
+
+.editVehicle-Form {
+    background-color: rgba(24, 53, 53, 0.273);
+    padding: 50px;
+    font-size: 20px;
+    font-weight: 500;
 }

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Card, CardBody, Popover, PopoverHeader, PopoverBody, CardTitle } from "reactstrap";
+import { Button, Card, CardBody, Popover, PopoverHeader, PopoverBody, CardTitle, Table } from "reactstrap";
 import { getAllReports } from "../../models/reportManager";
+import { getAllVehicles } from "../../models/vehicleManager";
 import ReportDetails from "./ReportDetails";
 import "./ShopPage.css"
 
@@ -10,6 +11,7 @@ import "./ShopPage.css"
 
 const ReportsList = () => {
     const [reports, setReports] = useState([]);
+    const [vehicles, setVehicles] = useState([]);
     const [reportId, setReportId] = useState(null);
 
     const navigate = useNavigate()
@@ -19,75 +21,47 @@ const ReportsList = () => {
     const getReports = () => {
         getAllReports().then(reports => setReports(reports));
     }
+    const getVehicles = () => {
+        getAllVehicles().then(vehicles => setVehicles(vehicles));
+    }
 
     /*--------------------------------------------------------------*/
     //useEffect Methods
     useEffect(() => {
         getReports();
+        getVehicles();
     }, []);
 
 
 
 
-    return (<>
+    return (<div className="shopPage-page-body">
 
         <div className="shopPage-btns">
-            <Button color="dark" onClick={() => {
+            <Button color="dark" className="shopPage-add-btn" onClick={() => {
                 navigate(`/report/form`)
             }}>
                 Submit a Vehicle
             </Button>
         </div>
 
-
-        <h2>Just Added</h2>
-        <div className="shopPage-justAdded-div">
-            {reports.map((report) => {
-                {
-                    if (report.categoryId == 4) {
-                        return <>
-                            <Card className="report-card" key={report.id} color="light">
-                                <h3> #{report.id}</h3>
-                                <CardBody className="report-cardBody">
-                                    <div className="shopPage-cardBody-div">
-                                        <img className="report-img" src={report?.vehicle?.imageLocation} alt="image"></img>
-                                        <p>{report?.vehicle?.vehicleNumber}</p>
-                                        <h4>Tags:</h4>
-                                        <ul>{report?.tags?.map((tag) => {
-                                            return <>
-                                                <li>{tag.status}</li>
-                                            </>
-                                        })}</ul>
-
-                                        <p>{report.vehicleNumber}</p>
-                                        <Button color="dark" onClick={() => {
-                                            navigate(`/report/details/${report.id}`)
-                                        }}>
-                                            Report Details
-                                        </Button>
-                                    </div>
-                                </CardBody>
-                            </Card>
-
-                        </>
-
-                    }
-
-                }
-
-            })}
+        <div className="shopPage-headers">
+            <h2 >Just Added</h2>
+            <h2 >Ready For Service</h2>
+            <h2>Ready Line</h2>
         </div>
 
+        <div className="shopPage-allList-div">
 
-        <div className="shopPage-container">
-            <div className="shopPage-reportsList-div">
-                <h2>Fast Lane</h2>
+
+
+            <div className="shopPage-justAdded-div">
                 {reports.map((report) => {
                     {
-                        if (report.categoryId == 1 && report?.vehicle?.isApproved == false) {
+                        if (report.categoryId == 4) {
                             return <>
-                                <Card className="report-card-fast" key={report.id} color="light" >
-                                    <CardTitle > <h3> #{report.id}</h3> </CardTitle>
+                                <Card className="report-card" key={report.id} color="light">
+                                    <h3> #{report.id}</h3>
                                     <CardBody className="report-cardBody">
                                         <div className="shopPage-cardBody-div">
                                             <img className="report-img" src={report?.vehicle?.imageLocation} alt="image"></img>
@@ -95,17 +69,16 @@ const ReportsList = () => {
                                             <h4>Tags:</h4>
                                             <ul>{report?.tags?.map((tag) => {
                                                 return <>
-                                                    <li>{tag.status}</li>
+                                                    <li key={tag.id}>{tag.status}</li>
                                                 </>
                                             })}</ul>
-                                            <p>{report.vehicleNumber}</p>
 
+                                            <p>{report.vehicleNumber}</p>
                                             <Button color="dark" onClick={() => {
                                                 navigate(`/report/details/${report.id}`)
                                             }}>
                                                 Report Details
                                             </Button>
-
                                         </div>
                                     </CardBody>
                                 </Card>
@@ -119,28 +92,120 @@ const ReportsList = () => {
                 })}
             </div>
 
-            <div>
 
-                <h2>Moderate</h2>
-                {reports.map((report) => {
+
+            <div className="shopPage-reportsList-div">
+                <Table className="vehiclePage-table">
+                    <thead className="homePage-shopList-thead">
+                        <tr>
+                            <th></th>
+                            <th>Img</th>
+                            <th>Vehicle Number</th>
+
+
+                            <th>Category</th>
+                            <th></th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        {reports.map((report) => {
+                            {
+                                if (report.categoryId !== 4 && report.dateCompleted == null && report?.vehicle?.isApproved == false && report?.vehicle?.isInShop == true) {
+                                    if (report.categoryId == 1) {
+                                        return <tr className="report-tr-1" key={report.id}>
+                                            <th className="report-th" scope="row" key={report.id}>
+                                                {report.id}
+
+                                            </th>
+                                            <td>
+                                                <img className="report-img" src={report?.vehicle?.imageLocation} alt="image"></img>
+
+                                            </td>
+                                            <td>
+
+                                                <p>{report?.vehicle?.vehicleNumber}</p>
+
+                                            </td>
+
+
+                                            <td>
+                                                <p>Quick Fix</p>
+
+                                            </td>
+                                            <td>
+                                                <Button color="dark" onClick={() => {
+                                                    navigate(`/report/details/${report.id}`)
+                                                }}>
+                                                    Report Details
+                                                </Button>
+
+                                            </td>
+
+
+                                        </tr>
+                                    }
+                                    else if (report.categoryId == 2) {
+                                        return <tr className="report-tr-2" key={report.id}>
+                                            <th className="report-th" scope="row">
+                                                {report.id}
+                                            </th>
+                                            <td>
+                                                <img className="report-img" src={report?.vehicle?.imageLocation} alt="image"></img>
+
+                                            </td>
+                                            <td>
+
+                                                <p>{report?.vehicle?.vehicleNumber}</p>
+
+                                            </td>
+
+
+                                            <td>
+                                                <p>Moderate</p>
+
+                                            </td>
+                                            <td>
+                                                <Button color="dark" onClick={() => {
+                                                    navigate(`/report/details/${report.id}`)
+                                                }}>
+                                                    Report Details
+                                                </Button>
+
+                                            </td>
+
+
+                                        </tr>
+                                    }
+
+
+                                }
+
+                            }
+
+
+                        })}
+                    </tbody>
+                </Table>
+
+            </div>
+
+
+            <div className="shopPage-readyLine-div">
+
+                {vehicles.map((vehicle) => {
                     {
-                        if (report.categoryId == 2 && report?.vehicle?.isApproved == false) {
+                        if (vehicle.isApproved == true && vehicle.isInShop == true) {
                             return <>
-                                <Card className="report-card" key={report.id} color="warning">
-                                    <h3> #{report.id}</h3>
+                                <Card className="report-card-ready" key={vehicle.id} >
+                                    <h3></h3>
                                     <CardBody className="report-cardBody">
-                                        <img className="report-img" src={report?.vehicle?.imageLocation} alt="image"></img>
-                                        <p>{report?.vehicle?.vehicleNumber}</p>
-                                        <h4>Tags:</h4>
-                                        <ul>{report?.tags?.map((tag) => {
-                                            return <>
-                                                <li>{tag.status}</li>
-                                            </>
-                                        })}</ul>
-
-                                        <p>{report.vehicleNumber}</p>
+                                        <img className="report-img" src={vehicle.imageLocation} alt="image"></img>
+                                        <p>{vehicle.vehicleNumber}</p>
+                                        <h4>Ready for Pick up</h4>
                                         <Button color="dark" onClick={() => {
-                                            navigate(`/report/details/${report.id}`)
+                                            navigate(`/report/details/${vehicle.id}`)
                                         }}>
                                             Report Details
                                         </Button>
@@ -154,46 +219,13 @@ const ReportsList = () => {
 
                 })}
             </div>
-            <div>
 
-                <h2>Ready Line</h2>
-                {reports.map((report) => {
-                    {
-                        if (report.dateCompleted != null && report?.vehicle?.isApproved == true && report?.vehicle?.isInShop == true) {
-                            return <>
-                                <Card className="report-card" key={report.id} color="success">
-                                    <h3> #{report.id}</h3>
-                                    <CardBody className="report-cardBody">
-                                        <img className="report-img" src={report?.vehicle?.imageLocation} alt="image"></img>
-                                        <p>{report?.vehicle?.vehicleNumber}</p>
-                                        <h4>Tags:</h4>
-                                        <ul>{report?.tags?.map((tag) => {
-                                            return <>
-                                                <li>{tag.status}</li>
-                                            </>
-                                        })}</ul>
-                                        <p>{report.vehicleNumber}</p>
-                                        <Button color="dark" onClick={() => {
-                                            navigate(`/report/details/${report.id}`)
-                                        }}>
-                                            Report Details
-                                        </Button>
-                                    </CardBody>
-                                </Card>
-                            </>
 
-                        }
-
-                    }
-
-                })}
-            </div>
 
 
         </div>
 
-
-    </>)
+    </div>)
 
 
 

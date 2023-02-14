@@ -85,6 +85,7 @@ namespace ReadyLine.Repositories
                     JOIN Category c on c.Id = r.CategoryId
                      LEFT JOIN ReportTag rt on rt.ReportId = r.Id
                     LEFT JOIN Tag t on t.Id = rt.TagId
+                    ORDER BY r.CategoryId
              
                     ";
 

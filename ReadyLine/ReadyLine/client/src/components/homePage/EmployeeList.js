@@ -63,7 +63,7 @@ const EmployeeList = () => {
                         <th>Img</th>
                         <th>Name</th>
                         <th>Email</th>
-                        <th>Job Title</th>
+
                         <th>Auth Level</th>
                         <th></th>
                         <th></th>
@@ -78,41 +78,28 @@ const EmployeeList = () => {
 
                             </th>
                             <td>
-                                <img className="homePage-user-img" src={user.imageUrl} alt="image"></img>
+                                <img className="homePage-userList-img" src={user.imageUrl} alt="image"></img>
 
                             </td>
-                            <td>
+                            <td className="homePage-userList-td">
                                 <p>{user.firstName} {user.lastName}</p>
 
                             </td>
-                            <td>
+                            <td className="homePage-userList-td">
 
                                 {user.email}
-                                {/* {
-                                    user.isClaimed
-                                    ? <p className="homePage-employeeList-p-claimed">Claimed</p>
-                                    
-                                    : <Button color="success" onClick={(clickEvent) => {
-                                        handleClaimButton(clickEvent, user.id);
-                                    }}>
-                                    Claim
-                                    </Button>
-                                } */}
 
                             </td>
-                            <td>
-                                <p>{user.jobTitle}</p>
 
-                            </td>
-                            <td>
-                                {
-                                    user.userTypeId == 1
-                                        ? <td>Basic</td>
-                                        : <td>Admin</td>
-                                }
 
-                            </td>
-                            <td>
+                            {
+                                user.userTypeId == 1
+                                    ? <td className="homePage-userList-basic">Basic</td>
+                                    : <td className="homePage-userList-admin">Admin</td>
+                            }
+
+
+                            <td >
                                 <Button color="dark" onClick={() => {
                                     navigate(`/user/${user.id}`)
                                 }}>

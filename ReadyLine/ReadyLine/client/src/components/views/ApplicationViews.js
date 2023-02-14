@@ -1,5 +1,6 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
+import { EditVehicle } from "../homePage/EditVehicle";
 import ShopList from "../homePage/ShopList";
 import UserDetails from "../homePage/UserDetails";
 import { CreateReport } from "../shopPage/CreateReport";
@@ -21,6 +22,7 @@ export default function ApplicationViews({ isLoggedIn }) {
                         element={isLoggedIn ? <ShopList /> : <Navigate to="/login" />}
                     />
                     <Route path="user/:id" element={<UserDetails />} />
+                    <Route path="vehicle/:id" element={<EditVehicle />} />
 
                     <Route path="vehicle">
                         <Route index element={<VehicleList />} />

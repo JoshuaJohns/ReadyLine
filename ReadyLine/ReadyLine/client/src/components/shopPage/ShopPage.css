@@ -1,8 +1,76 @@
-.shopPage-container {
-    display: flex;
-    justify-content: space-around;
-    /* background-image: url("/images/body1.jpeg"); */
+.shopPage-page-body {
+    background-color: rgba(24, 53, 53, 0.273);
+    height: auto;
+    min-height: 1200px;
+
 }
+
+/*-------------------------Headers/Btn------------------------------------------------------*/
+.shopPage-btns {
+    padding: 40px;
+    box-shadow: black;
+
+}
+
+.shopPage-add-btn {
+    font-size: 20px !important;
+}
+
+.shopPage-headers {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 700;
+    font-style: italic;
+    padding-left: 120px;
+    padding-right: 130px;
+}
+
+/*-------------------------All List------------------------------------------------------*/
+
+.shopPage-allList-div {
+    display: flex;
+    justify-content: space-between;
+    margin-left: 60px;
+    margin-right: 60px;
+    padding-bottom: 100px;
+}
+
+/*-------------------------Just Added------------------------------------------------------*/
+.shopPage-justAdded-div {
+
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+
+    background-color: rgba(80, 79, 78, 0.404);
+    padding: 40px;
+}
+
+
+/*-------------------------WorkOrder List------------------------------------------------------*/
+.shopPage-reportsList-div {
+    padding-bottom: 50px;
+    width: 700px;
+    margin-top: 30px;
+}
+
+.report-tr-1 {}
+
+.report-tr-2 {
+    background-color: rgba(239, 236, 9, 0.515);
+
+}
+
+/*-------------------------Ready Line------------------------------------------------------*/
+.shopPage-readyLine-div {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+
+    background-color: rgba(80, 79, 78, 0.404);
+    padding: 40px;
+}
+
 
 
 
@@ -13,21 +81,103 @@
 }
 
 
-.shopPage-justAdded-div {
-    margin: 100px;
-    margin-top: 30px;
-    display: flex;
-    flex-wrap: wrap;
-}
 
 .report-card {
-    width: 250px;
+    width: 200px;
     margin: 5px;
     background-color: rgb(6, 6, 89);
 
 }
 
+.report-card-ready {
+    width: 200px;
+    margin: 5px;
+    background-color: rgba(11, 247, 2, 0.374) !important;
+
+}
+
+.report-img {
+    width: 150px;
+}
+
 .report-card-fast {
     color: blue;
 
+}
+
+
+/*-------------------------Report Details------------------------------------------------------*/
+.reportDetails-container {
+    display: flex;
+    justify-content: space-around;
+
+    padding-top: 40px;
+    padding-bottom: 50px;
+    background-color: rgba(24, 53, 53, 0.273);
+    height: auto;
+
+}
+
+.reportDetails-card {
+    padding: 10px;
+    font-size: 18px;
+}
+
+.reportDetails-img {
+    height: 250px;
+}
+
+.reportDetails-goBack-btn {
+    margin-top: 10px;
+}
+
+.reportDetails-issue {
+    background-color: rgba(103, 103, 103, 0.29);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 500px;
+}
+
+/*-----------------------------------------------Create Report-------------------------------------*/
+.createReport-container {
+    display: flex;
+    justify-content: space-around;
+    padding-top: 80px;
+    height: auto;
+
+}
+
+.createReport-form {
+    background-color: rgba(24, 53, 53, 0.273);
+    padding: 50px;
+    font-size: 20px;
+    font-weight: 500;
+
+}
+
+.createReport-h2 {
+    font-style: italic;
+    margin-bottom: 30px;
+}
+
+
+
+.createReport-formGroup {
+    max-width: 500px;
+    margin-right: 30px;
+    padding-left: 10px;
+}
+
+.createReport-formGroup-checkBox {
+    max-width: 500px;
+}
+
+.createReport-formGroup-issue {
+    margin-right: 20px;
+}
+
+.createReport-div-checkBox {
+    padding-left: 10px;
 }

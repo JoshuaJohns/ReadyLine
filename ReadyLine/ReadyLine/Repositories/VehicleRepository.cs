@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using ReadyLine.Models;
 using ReadyLine.Utils;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ReadyLine.Repositories
 {
@@ -119,14 +120,20 @@ namespace ReadyLine.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        SELECT 
+                        SELECT TOP 50
                             v.Id, v.ImageLocation, v.IsApproved, v.IsClaimed, v.IsInShop, v.MileageAtPMService, v.VehicleNumber, v.VehicleTypeId, v.CurrentMileage,
                             vt.Id, vt.Name,
-                            r.Id as ReportId, r.CategoryId, r.DateCompleted, r.DateCreated, r.Issue, r.UserId, r.VehicleId
+                            r.Id as ReportId, r.CategoryId, r.DateCompleted, r.DateCreated, r.Issue, r.UserId, r.VehicleId,
+                            u.FirstName, u.LastName,
+                             t.Status, t.Id as TagId
                          FROM Vehicle v
                         JOIN VehicleType vt on vt.Id = v.VehicleTypeId
                        LEFT JOIN Report r on r.VehicleId = v.Id
+                        LEFT JOIN [User] u on u.Id = r.UserId
+                          LEFT JOIN ReportTag rt on rt.ReportId = r.Id
+                    LEFT JOIN Tag t on t.Id = rt.TagId
                     WHERE v.Id = @Id
+                    ORDER BY r.DateCreated DESC
                       
              
 ";
@@ -137,42 +144,56 @@ namespace ReadyLine.Repositories
                     {
 
                         Vehicle vehicle = null;
+                        
+
                         while (reader.Read())
                         {
+
                             if (vehicle == null)
                             {
                                 vehicle = NewVehicleFromReader(reader);
 
                             }
 
-                            if (DbUtils.IsNotDbNull(reader, "ReportId"))
+
+
+                            var reportId = DbUtils.GetInt(reader, "ReportId");
+
+                            var existingReport = vehicle.Reports.FirstOrDefault(prop => prop.Id == reportId);
+
+                            if (DbUtils.IsNotDbNull(reader, "ReportId") && existingReport == null)
                             {
-                                vehicle.Reports.Add(
-                                new Report
+                                
+                              existingReport =  new Report()
                                 {
-                                    Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                                    Id = reader.GetInt32(reader.GetOrdinal("ReportId")),
                                     Issue = reader.GetString(reader.GetOrdinal("Issue")),
                                     DateCreated = reader.GetDateTime(reader.GetOrdinal("DateCreated")),
                                     DateCompleted = DbUtils.GetNullableDateTime(reader, "DateCompleted"),
                                     CategoryId = reader.GetInt32(reader.GetOrdinal("CategoryId")),
                                     Tags = new List<Tag>(),
                                     UserId = reader.GetInt32(reader.GetOrdinal("UserId")),
-                                    // User = new User()
-                                    // {
-                                    //     Id = reader.GetInt32(reader.GetOrdinal("Id")),
-                                    //     FirebaseUserId = reader.GetString(reader.GetOrdinal("FirebaseUserId")),
-                                    //     FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
-                                    //     LastName = reader.GetString(reader.GetOrdinal("LastName")),
-                                    //     Email = reader.GetString(reader.GetOrdinal("Email")),
-                                    //     ImageUrl = DbUtils.GetString(reader, "ImageUrl"),
-                                    // },
+                                    User = new User()
+                                    {
+                                        FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
+                                        LastName = reader.GetString(reader.GetOrdinal("LastName"))
+                                    },
                                     VehicleId = reader.GetInt32(reader.GetOrdinal("VehicleId")),
-                                    // Vehicle = new Vehicle()
-                                    // {
-                                    //     Id = reader.GetInt32(reader.GetOrdinal("Id")),
-                                    //     vehicleTypeId = reader.GetInt32(reader.GetOrdinal("vehicleTypeId")),
-                                    //     VehicleNumber = reader.GetString(reader.GetOrdinal("VehicleNumber")),
-                                });
+                                   
+                                };
+                                vehicle.Reports.Add(existingReport);
+                            }
+                            if (DbUtils.IsNotDbNull(reader, "TagId"))
+                            {
+                                existingReport.Tags.Add(
+                                  new Tag
+                                  {
+                                      Id = reader.GetInt32(reader.GetOrdinal("TagId")),
+                                      Status = reader.GetString(reader.GetOrdinal("Status")),
+
+                                  });
+
+
                             }
 
                         }

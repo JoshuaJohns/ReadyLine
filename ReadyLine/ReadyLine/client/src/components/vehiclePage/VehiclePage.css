@@ -1,15 +1,72 @@
-.vehiclePage-container {
-    display: flex;
-
-
-
+.vehiclePage-body {
+    background-color: rgba(24, 53, 53, 0.273);
+    height: auto;
+    min-height: 1200px;
 }
 
-.vehiclePage-details-div {
-    float: right;
+/*----------------------------------Add Vehicle-----------------------------------------*/
+.vehiclePage-addBtn {
+    padding-top: 1.5em;
+    padding-left: 1.5em;
+    padding-bottom: 1.5em;
+}
+
+.vehicleAddForm {
+    margin-left: 20px;
+    width: 500px;
+    background-color: rgba(0, 0, 0, 0.259);
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 10px;
+}
+
+.form-group {
+    margin: 10px;
+}
+
+.vehicleAdd-label {
+    font-weight: 600;
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+.vehicleAdd-radioLabel {
+    margin-left: 10px;
+    width: 100px;
+}
+
+.btn-primary {
+    margin: 10px;
+}
+
+
+
+
+
+
+/*----------------------------------Vehicle List-----------------------------------------*/
+.vehiclePage-search-div {
+    margin-bottom: 10px;
+}
+
+.input-find {
+    margin-left: 375px;
     width: 400px;
-    margin: 50px;
-    margin-top: 0;
+    height: 35px;
+    border-radius: 9px;
+    border-color: white;
+}
+
+.vehiclePage-container {
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+}
+
+
+.vehiclePage-table {
+    background-color: rgb(247, 245, 242);
+
 }
 
 .vehicle-img {
@@ -29,4 +86,34 @@
 
 .vehiclePage-p-claimed {
     color: rgb(192, 3, 3);
+}
+
+.claim_button {
+    color: green
+}
+
+
+
+
+
+/*----------------------------------Vehicle Details-----------------------------------------*/
+
+.vehiclePage-details-div {
+    float: right;
+    width: 400px;
+    margin: 50px;
+    margin-top: 0;
+}
+
+.vehicleDetails-card {
+    margin-bottom: 10px;
+}
+
+.delete-vehicle {
+    color: rgb(230, 24, 24) !important;
+    background-color: rgb(221, 224, 227) !important;
+}
+
+.vehicleDetails-card-b {
+    width: 100px !important;
 }

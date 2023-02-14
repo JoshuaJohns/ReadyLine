@@ -6,6 +6,7 @@ import { deleteVehicle, getVehicleById } from "../../models/vehicleManager";
 export default function VehicleDetails({ vehicleId, setAddedVehicle }) {
     const [vehicle, setVehicle] = useState(null)
 
+
     const getVehicleDetails = (id) => {
         getVehicleById(id).then(vehicle => setVehicle(vehicle));
     }
@@ -27,19 +28,21 @@ export default function VehicleDetails({ vehicleId, setAddedVehicle }) {
     return (
         <>
             <h2>Vehicle Details</h2>
-            <Card color="dark" key={vehicle.id} inverse>
+            <Card className="vehicleDetails-card" color="dark" key={vehicle.id} inverse>
                 <CardBody>
                     <CardTitle tag="h4">
                         {vehicle.brand}
                     </CardTitle>
-                    <p>Vehicle #: {vehicle.vehicleNumber}</p>
-                    <p>Current Mileage: {vehicle.currentMileage}</p>
-                    <p>Mileage Since Last PM Service: {vehicle.currentMileage - vehicle.mileageAtPMService}</p>
-                    <Button color="light" onClick={() => {
+                    <p><b className="vehicleDetails-card-b">Vehicle #:</b> {vehicle.vehicleNumber}</p>
+                    <p><b className="vehicleDetails-card-b">Current Mileage:</b> {vehicle.currentMileage}</p>
+                    <p><b className="vehicleDetails-card-b">Mileage Since Last PM Service:</b> {vehicle.currentMileage - vehicle.mileageAtPMService}</p>
+                    <Button className="delete-vehicle" variant='custom' onClick={() => {
+                        prompt("Are you sure you want to Delete this vehicle")
                         deleteVehicle(vehicle.id).then(() => {
-                            window.alert(`Vehicle ${vehicle.vehicleNumber} deleted succesfuly`)
+
+                            vehicleId = null
                             setAddedVehicle(true)
-                            vehicleId = 0
+                            window.alert(`Vehicle ${vehicle.vehicleNumber} deleted succesfuly`)
                         })
 
                     }}>
@@ -53,11 +56,19 @@ export default function VehicleDetails({ vehicleId, setAddedVehicle }) {
                     <CardTitle tag="h5">
                         {report.dateCreated.split('T')[0]}
                     </CardTitle>
-                    <CardSubtitle>
-                        Completed: {report.dateCompleted ? report.dateCompleted.split('T')[0] : 'Open'}
+                    <CardSubtitle className="vehicleDetails-sub">
+                        <b>Submitted By:</b>  {report?.user?.firstName} {report?.user?.lastName}
                     </CardSubtitle>
-                    <CardText>
-                        Issue: {report.issue}
+                    <CardSubtitle className="vehicleDetails-sub">
+                        <b> Completed:</b> {report.dateCompleted ? report.dateCompleted.split('T')[0] : 'Open'}
+                    </CardSubtitle >
+                    <CardText className="vehicleDetails-text">
+                        <b>Tags:</b>   {report?.tags?.map((tag) => {
+                            return <li className="vehicleDetails-tagList" key={tag.id}>{tag.status}</li>
+                        })}
+                    </CardText>
+                    <CardText className="vehicleDetails-text">
+                        <b>Issue:</b> {report.issue}
                     </CardText>
                 </CardBody>
             </Card>)}

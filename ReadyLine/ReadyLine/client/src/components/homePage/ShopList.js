@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button, Card, CardBody, CardImg, CardImgOverlay, CardText, Table, } from "reactstrap";
 import { getAllReports } from "../../models/reportManager";
 import { getCurrentUserInfo } from "../../models/userManager";
@@ -11,6 +12,7 @@ const ShopList = () => {
     const [filteredVehicles, setfilteredVehicles] = useState([]);
     const [user, setUser] = useState([]);
     const [authorized, setAuthorized] = useState(false);
+    const navigate = useNavigate()
 
     //Get Methods
     const getVehicles = () => {
@@ -44,6 +46,21 @@ const ShopList = () => {
                 getVehicles()
             })
     }
+    const handleUnClaimButton = (event, vehicleId) => {
+        event.preventDefault()
+        const claimToSendToAPI = {
+            vehicleId: vehicleId
+
+        }
+
+        return deleteClaim(vehicleId)
+            .then((res) => {
+                getUser()
+            })
+    }
+
+
+
 
 
 
@@ -64,67 +81,41 @@ const ShopList = () => {
             authorized
 
                 ?
-                <>
+                <div className="homePage-readyLine-container">
                     <div className="homePage-readyLine-div">
                         <div className="homePage-count-div">
-                            <h1>Ready Line</h1>  <h3 className="homePage-count-h3">Count: {count}</h3>
+                            <h1>Ready Line</h1>
+                            <h3 className="homePage-count-h3">Count: {count}</h3>
 
                         </div>
-                        <Table className="vehiclePage-table">
-                            <thead className="homePage-shopList-thead">
-                                <tr>
-                                    <th></th>
-                                    <th>Img</th>
-                                    <th>Type</th>
-                                    <th>Vehicle Number</th>
-                                    <th></th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-
+                        <Table className="homePage-readyLine-table">
                             <tbody>
-
-
                                 {
                                     filtered.map((vehicle) => {
-                                        return <tr className="vehicle-tr" key={vehicle.id}>
-                                            <th className="vehicle-th" scope="row">
+                                        return <tr className="home-readyLine-tr" key={vehicle.id}>
+                                            <th className="home-readyLine-th" scope="row">
 
                                             </th>
                                             <td>
-                                                <img className="vehicle-img" src={vehicle.imageLocation} alt="image"></img>
+                                                <img className="home-readyLine-img" src={vehicle.imageLocation} alt="image"></img>
 
                                             </td>
                                             <td>
-                                                <p>{vehicle?.vehicleType?.name}</p>
+                                                <p className="home-readyLine-type">{vehicle?.vehicleType?.name}</p>
 
                                             </td>
 
                                             <td>
-                                                <p>{vehicle.vehicleNumber}</p>
+                                                <p className="home-readyLine-number">{vehicle.vehicleNumber}</p>
 
                                             </td>
                                             <td>
-                                                <Button color="success" onClick={(clickEvent) => {
+                                                <Button color="success" className="home-readyLine-pickedUp" onClick={(clickEvent) => {
                                                     handleUpdateButton(clickEvent, vehicle);
                                                 }}>
                                                     Vehicle Picked Up
                                                 </Button>
                                             </td>
-                                            {/* <td>
-                                                <Button color="dark" onClick={() => {
-
-
-                                                    window.scrollTo({
-                                                        top: 0,
-                                                        left: 0,
-                                                        behavior: 'smooth'
-                                                    });
-                                                }}>
-                                                    Show Details
-                                                </Button>
-
-                                            </td> */}
                                             <td></td>
 
                                         </tr>
@@ -135,38 +126,64 @@ const ShopList = () => {
                         </Table>
 
                     </div>
+                    <div className="homePage-readyLine-div">
+                        <h2>Your Vehicle(s)...</h2>
+                        <div className="vehiclePage-container">
+                            <div className="homePage-shopList-div">
+                                {user?.vehicles?.map((vehicle) => {
+                                    let mileageUntilPmService = 10000 - (vehicle.currentMileage - vehicle.mileageAtPMService)
+                                    return <Card className="homePage-vehicle-card" key={vehicle.id}>
+                                        <CardBody className="homePage-vehicle-cardBody">
+                                            <p className="homePage-vehicle-pmService">{mileageUntilPmService}mi until next PM Service</p>
+                                            <img className="homePage-vehicle-img" src={vehicle.imageLocation} alt="image"></img>
+                                            <p className="homePage-vehicle-p"><b>Number:</b> {vehicle.vehicleNumber}</p>
+                                            <p className="homePage-vehicle-p"><b>Type:</b> {vehicle?.vehicleType?.name}</p>
+                                            <p className="homePage-vehicle-p"><b>Current Mileage:</b> {vehicle.currentMileage}mi</p>
 
-                </>
+                                            <Button color="danger" onClick={(clickEvent) => {
+                                                handleUnClaimButton(clickEvent, vehicle.id);
+                                            }}>
+                                                UnClaim
+                                            </Button>
+                                            <Button color="dark" className="homePage-edit-vehicle" onClick={() => {
+                                                navigate(`vehicle/${vehicle.id}`)
+                                            }}>
+                                                Edit
+                                            </Button>
+                                        </CardBody>
+                                    </Card>
+
+                                })}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
                 :
-                <>
+
+                <div className="homePage-readyLine-div">
                     <h2>Your Vehicle(s)...</h2>
                     <div className="vehiclePage-container">
                         <div className="homePage-shopList-div">
                             {user?.vehicles?.map((vehicle) => {
-                                return <Card className="vehicle-card" key={vehicle.id}>
-                                    <CardBody className="vehicle-cardBody">
-                                        <img className="vehicle-img" src={vehicle.imageLocation} alt="image"></img>
-                                        <p>{vehicle?.vehicleType?.name}</p>
-                                        {
-                                            vehicle.isClaimed
-                                                ? <p>Yes</p> : <p>No</p>
-                                        }
-                                        <p>{vehicle.vehicleNumber}</p>
-                                        <Button color="danger" onClick={(clickEvent) => {
+                                let mileageUntilPmService = 10000 - (vehicle.currentMileage - vehicle.mileageAtPMService)
+                                return <Card className="homePage-vehicle-card" key={vehicle.id}>
+                                    <CardBody className="homePage-vehicle-cardBody">
+                                        <p className="homePage-vehicle-pmService">{mileageUntilPmService}mi until next PM Service</p>
+                                        <img className="homePage-vehicle-img" src={vehicle.imageLocation} alt="image"></img>
+                                        <p className="homePage-vehicle-p"><b>Number:</b> {vehicle.vehicleNumber}</p>
+                                        <p className="homePage-vehicle-p"><b>Type:</b> {vehicle?.vehicleType?.name}</p>
+                                        <p className="homePage-vehicle-p"><b>Current Mileage:</b> {vehicle.currentMileage}mi</p>
 
+                                        <Button color="danger" onClick={(clickEvent) => {
+                                            handleUnClaimButton(clickEvent, vehicle.id);
                                         }}>
                                             UnClaim
                                         </Button>
                                         <Button color="dark" onClick={() => {
-
-
-                                            window.scrollTo({
-                                                top: 0,
-                                                left: 0,
-                                                behavior: 'smooth'
-                                            });
+                                            navigate(`vehicle/${vehicle.id}`)
                                         }}>
-                                            Show Details
+                                            Edit
                                         </Button>
                                     </CardBody>
                                 </Card>
@@ -174,8 +191,8 @@ const ShopList = () => {
                             })}
                         </div>
                     </div>
+                </div>
 
-                </>
 
 
         }
@@ -209,6 +226,7 @@ const ShopList = () => {
 
 
                     <img
+                        className="hompage-userImg"
                         alt="Card cap"
                         src={user.imageUrl}
 
@@ -218,7 +236,10 @@ const ShopList = () => {
                 </CardImgOverlay>
             </Card>
 
-            <EmployeeList />
+            <div className="homePage-employeeList-Container">
+
+                <EmployeeList />
+            </div>
 
         </div>
 

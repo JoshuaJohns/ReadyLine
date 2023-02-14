@@ -6,11 +6,14 @@ import VehicleDetails from "./VehicleDetails";
 import "./VehiclePage.css"
 
 
-const VehicleList = () => {
+
+const VehicleList = (terms) => {
     const [vehicles, setVehicles] = useState([]);
+    const [filteredVehicles, setFilteredVehicles] = useState([]);
     const [vehicleId, setVehicleId] = useState(null);
     const [newVehicle, setNewVehicle] = useState(false);
     const [addedVehicle, setAddedVehicle] = useState(false);
+    const [searchTerm, setSeach] = useState('');
 
 
 
@@ -30,6 +33,14 @@ const VehicleList = () => {
         getVehicles();
     }, [addedVehicle]);
 
+    useEffect(
+        () => {
+            const searchedVehicles = vehicles.filter(vehicle => {
+                return vehicle.vehicleNumber.toLowerCase().startsWith(searchTerm.toLowerCase())
+            })
+            setFilteredVehicles(searchedVehicles)
+        }, [searchTerm, vehicles]
+    )
     /*----------------------------------Buttons----------------------------------------------------*/
     const handleClaimButton = (event, vehicleId) => {
         event.preventDefault()
@@ -46,8 +57,7 @@ const VehicleList = () => {
 
 
 
-
-    return (<>
+    return (<div className="vehiclePage-body">
 
         {
             newVehicle
@@ -55,102 +65,122 @@ const VehicleList = () => {
                 <CreateVehicle setNewVehicle={setNewVehicle} setAddedVehicle={setAddedVehicle} />
 
                 :
-                <Button color="dark" onClick={() => {
-                    setNewVehicle(true);
-                }}>
-                    Add a Vehicle
-                </Button>
+                <div className="vehiclePage-addBtn">
+                    <Button color="dark" onClick={() => {
+                        setNewVehicle(true);
+                    }}>
+                        Add a Vehicle
+                    </Button>
+
+                </div>
 
 
         }
+        <div className="vehiclePage-details-div">
+            <VehicleDetails vehicleId={vehicleId} setAddedVehicle={setAddedVehicle} />
+        </div>
         <div className="vehiclePage-container">
+            <div className="vehiclePage-search-div">
+                <input
 
+                    className="input-find"
+                    onChange={
+                        (event) => {
+                            setSeach(event.target.value)
+                        }
+                    }
+                    type="text" placeholder="Search by Vehicle #" />
 
-            <Table className="vehiclePage-table">
-                <thead className="homePage-shopList-thead">
-                    <tr>
-                        <th></th>
-                        <th>Img</th>
-                        <th>Type</th>
-                        <th>Claimed</th>
-                        <th>Vehicle Number</th>
-                        <th>In Shop</th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                </thead>
-
-                <tbody>
-
-                    {vehicles.map((vehicle) => {
-                        return <tr className="vehicle-tr" key={vehicle.id}>
-                            <th className="vehicle-th" scope="row">
-
-                            </th>
-                            <td>
-                                <img className="vehicle-img" src={vehicle.imageLocation} alt="image"></img>
-
-                            </td>
-                            <td>
-                                <p>{vehicle?.vehicleType?.name}</p>
-
-                            </td>
-                            <td>
-                                {
-                                    vehicle.isClaimed
-                                        ? <p className="vehiclePage-p-claimed">Claimed</p>
-
-                                        : <Button color="success" onClick={(clickEvent) => {
-                                            handleClaimButton(clickEvent, vehicle.id);
-                                        }}>
-                                            Claim
-                                        </Button>
-                                }
-
-                            </td>
-                            <td>
-                                <p>{vehicle.vehicleNumber}</p>
-
-                            </td>
-                            <td>
-                                {vehicle.isApproved
-                                    ? <p>Approved</p>
-                                    : <p>False</p>
-                                }
-
-                            </td>
-                            <td>
-                                <Button color="dark" onClick={() => {
-                                    setVehicleId(vehicle.id);
-
-                                    window.scrollTo({
-                                        top: 0,
-                                        left: 0,
-                                        behavior: 'smooth'
-                                    });
-                                }}>
-                                    Show Details
-                                </Button>
-
-                            </td>
-                            <td></td>
+            </div>
+            <div>
+                <Table className="vehiclePage-table">
+                    <thead className="homePage-shopList-thead">
+                        <tr>
+                            <th></th>
+                            <th>Img</th>
+                            <th>Type</th>
+                            <th>Claim</th>
+                            <th>Vehicle Number</th>
+                            <th>In Shop</th>
+                            <th></th>
 
                         </tr>
+                    </thead>
 
-                    })}
-                </tbody>
+                    <tbody>
 
-            </Table>
-            <div className="vehiclePage-details-div">
-                <VehicleDetails vehicleId={vehicleId} setAddedVehicle={setAddedVehicle} />
+                        {filteredVehicles.map((vehicle) => {
+                            return <tr className="vehicle-tr" key={vehicle.id}>
+                                <th className="vehicle-th" scope="row">
+
+                                </th>
+                                <td>
+                                    <img className="vehicle-img" src={vehicle.imageLocation} alt="image"></img>
+
+                                </td>
+                                <td>
+                                    <p>{vehicle?.vehicleType?.name}</p>
+
+                                </td>
+                                <td>
+                                    {
+                                        vehicle.isClaimed
+                                            ? <p className="vehiclePage-p-claimed">Claimed</p>
+
+                                            : <Button color="success" onClick={(clickEvent) => {
+                                                handleClaimButton(clickEvent, vehicle.id);
+                                            }}>
+                                                Claim
+                                            </Button>
+                                    }
+
+                                </td>
+                                <td>
+                                    <p>{vehicle.vehicleNumber}</p>
+
+                                </td>
+                                <td>
+                                    {vehicle.isApproved
+                                        ? <p>Approved</p>
+                                        : <p>False</p>
+                                    }
+
+                                </td>
+                                <td>
+                                    <Button color="dark" onClick={() => {
+                                        setVehicleId(vehicle.id);
+
+                                        window.scrollTo({
+                                            top: 0,
+                                            left: 0,
+                                            behavior: 'smooth'
+                                        });
+                                    }}>
+                                        Show Details
+                                    </Button>
+
+                                </td>
+
+
+                            </tr>
+
+                        })}
+                    </tbody>
+
+                </Table>
             </div>
+
+
+
+
         </div>
 
 
 
-    </>)
+    </div>)
 
 
 
 }
+
 export default VehicleList;
