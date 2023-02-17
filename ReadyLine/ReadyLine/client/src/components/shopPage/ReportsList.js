@@ -22,7 +22,13 @@ const ReportsList = () => {
         getAllReports().then(reports => setReports(reports));
     }
     const getVehicles = () => {
-        getAllVehicles().then(vehicles => setVehicles(vehicles));
+        getAllVehicles().then(vehicles => {
+            vehicles.map((vehicle) => {
+
+                vehicle.reports = vehicle.reports[0]
+            })
+            setVehicles(vehicles)
+        });
     }
 
     /*--------------------------------------------------------------*/
@@ -59,31 +65,30 @@ const ReportsList = () => {
                 {reports.map((report) => {
                     {
                         if (report.categoryId == 4) {
-                            return <>
-                                <Card className="report-card" key={report.id} color="light">
-                                    <h3> #{report.id}</h3>
-                                    <CardBody className="report-cardBody">
-                                        <div className="shopPage-cardBody-div">
-                                            <img className="report-img" src={report?.vehicle?.imageLocation} alt="image"></img>
-                                            <p>{report?.vehicle?.vehicleNumber}</p>
-                                            <h4>Tags:</h4>
-                                            <ul>{report?.tags?.map((tag) => {
-                                                return <>
-                                                    <li key={tag.id}>{tag.status}</li>
-                                                </>
-                                            })}</ul>
+                            return (<Card className="report-card" key={report.id} color="light">
+                                <h3> #{report.id}</h3>
+                                <CardBody className="report-cardBody">
+                                    <div className="shopPage-cardBody-div">
+                                        <img className="report-img" src={report?.vehicle?.imageLocation} alt="image"></img>
+                                        <p>{report?.vehicle?.vehicleNumber}</p>
+                                        <h4>Tags:</h4>
+                                        <ul>{report?.tags?.map((tag) => {
+                                            return (
+                                                <li key={tag.id}>{tag.status}</li>
+                                            )
+                                        })}</ul>
 
-                                            <p>{report.vehicleNumber}</p>
-                                            <Button color="dark" onClick={() => {
-                                                navigate(`/report/details/${report.id}`)
-                                            }}>
-                                                Report Details
-                                            </Button>
-                                        </div>
-                                    </CardBody>
-                                </Card>
+                                        <p>{report.vehicleNumber}</p>
+                                        <Button color="dark" onClick={() => {
+                                            navigate(`/report/details/${report.id}`)
+                                        }}>
+                                            Report Details
+                                        </Button>
+                                    </div>
+                                </CardBody>
+                            </Card>
 
-                            </>
+                            )
 
                         }
 
@@ -113,9 +118,9 @@ const ReportsList = () => {
                         {reports.map((report) => {
                             {
                                 if (report.categoryId !== 4 && report.dateCompleted == null && report?.vehicle?.isApproved == false && report?.vehicle?.isInShop == true) {
-                                    if (report.categoryId == 1) {
-                                        return <tr className="report-tr-1" key={report.id}>
-                                            <th className="report-th" scope="row" key={report.id}>
+                                    if (report.categoryId == 1 && report?.vehicle?.isApproved == false) {
+                                        return (<tr className="report-tr-1" key={report.id}>
+                                            <th className="report-th" scope="row" >
                                                 {report.id}
 
                                             </th>
@@ -144,10 +149,10 @@ const ReportsList = () => {
                                             </td>
 
 
-                                        </tr>
+                                        </tr>)
                                     }
-                                    else if (report.categoryId == 2) {
-                                        return <tr className="report-tr-2" key={report.id}>
+                                    else if (report.categoryId == 2 && report?.vehicle?.isApproved == false) {
+                                        return (<tr className="report-tr-2" key={report.id}>
                                             <th className="report-th" scope="row">
                                                 {report.id}
                                             </th>
@@ -176,7 +181,7 @@ const ReportsList = () => {
                                             </td>
 
 
-                                        </tr>
+                                        </tr>)
                                     }
 
 
@@ -197,7 +202,7 @@ const ReportsList = () => {
                 {vehicles.map((vehicle) => {
                     {
                         if (vehicle.isApproved == true && vehicle.isInShop == true) {
-                            return <>
+                            return (
                                 <Card className="report-card-ready" key={vehicle.id} >
                                     <h3></h3>
                                     <CardBody className="report-cardBody">
@@ -205,13 +210,13 @@ const ReportsList = () => {
                                         <p>{vehicle.vehicleNumber}</p>
                                         <h4>Ready for Pick up</h4>
                                         <Button color="dark" onClick={() => {
-                                            navigate(`/report/details/${vehicle.id}`)
+                                            navigate(`/report/details/${vehicle?.reports?.id}`)
                                         }}>
                                             Report Details
                                         </Button>
                                     </CardBody>
                                 </Card>
-                            </>
+                            )
 
                         }
 

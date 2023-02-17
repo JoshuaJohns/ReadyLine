@@ -70,6 +70,40 @@ namespace ReadyLine.Repositories
                 }
             }
         }
+        public List<UserType> GetAllUserTypes()
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+               SELECT *
+                 FROM [UserType] u  
+            
+            ";
+
+                    var reader = cmd.ExecuteReader();
+
+                    var users = new List<UserType>();
+
+                    while (reader.Read())
+                    {
+                        users.Add(
+                            new UserType()
+                            {
+                                Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                                Name = reader.GetString(reader.GetOrdinal("Name"))
+                            }
+                            );
+                    }
+
+                    reader.Close();
+
+                    return users;
+                }
+            }
+        }
 
         public User GetByFirebaseUserId(string firebaseUserId)
         {
@@ -329,10 +363,11 @@ namespace ReadyLine.Repositories
                                LastName = @LastName,
                                HireDate = @HireDate,
                                UserTypeId = @UserTypeId,
-                               JobTitle = @JobTitle
+                               JobTitle = @JobTitle,
                                 FirebaseUserId = @FirebaseUserId
 
                          WHERE Id = @Id";
+                    DbUtils.AddParameter(cmd, "@Id", profile.Id);
                     DbUtils.AddParameter(cmd, "@FirebaseUserId", profile.FirebaseUserId);
                     DbUtils.AddParameter(cmd, "@Email", profile.Email);
                     DbUtils.AddParameter(cmd, "@ImageUrl", profile.ImageUrl);

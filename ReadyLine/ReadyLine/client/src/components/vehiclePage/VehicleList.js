@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, Card, CardBody, Table } from "reactstrap";
+import { getCurrentUserInfo } from "../../models/userManager";
 import { addClaim, getAllVehicles, putVehicle } from "../../models/vehicleManager";
 import { CreateVehicle } from "./CreateVehicle";
 import VehicleDetails from "./VehicleDetails";
@@ -13,7 +14,9 @@ const VehicleList = (terms) => {
     const [vehicleId, setVehicleId] = useState(null);
     const [newVehicle, setNewVehicle] = useState(false);
     const [addedVehicle, setAddedVehicle] = useState(false);
+    const [authorized, setAuthorized] = useState(false);
     const [searchTerm, setSeach] = useState('');
+    const [currentUser, setCurrentUser] = useState({});
 
 
 
@@ -23,11 +26,22 @@ const VehicleList = (terms) => {
         getAllVehicles().then(vehicles => setVehicles(vehicles));
         setAddedVehicle(false)
     }
+    const getUser = () => {
+        getCurrentUserInfo().then((user) => {
+            setCurrentUser(user)
+            if (user.userTypeId == 2) {
+                setAuthorized(true)
+            }
+
+        }
+        )
+    }
 
     /*--------------------------------------------------------------*/
     //useEffect Methods
     useEffect(() => {
         getVehicles();
+        getUser();
     }, []);
     useEffect(() => {
         getVehicles();
@@ -65,9 +79,14 @@ const VehicleList = (terms) => {
                 <CreateVehicle setNewVehicle={setNewVehicle} setAddedVehicle={setAddedVehicle} />
 
                 :
+
                 <div className="vehiclePage-addBtn">
-                    <Button color="dark" onClick={() => {
-                        setNewVehicle(true);
+                    <Button color="dark" className="addVehicle-btn" onClick={() => {
+                        authorized
+                            ?
+                            setNewVehicle(true)
+                            :
+                            alert("not Authorized")
                     }}>
                         Add a Vehicle
                     </Button>
@@ -77,7 +96,7 @@ const VehicleList = (terms) => {
 
         }
         <div className="vehiclePage-details-div">
-            <VehicleDetails vehicleId={vehicleId} setAddedVehicle={setAddedVehicle} />
+            <VehicleDetails vehicleId={vehicleId} setAddedVehicle={setAddedVehicle} authorized={authorized} />
         </div>
         <div className="vehiclePage-container">
             <div className="vehiclePage-search-div">
@@ -136,12 +155,12 @@ const VehicleList = (terms) => {
 
                                 </td>
                                 <td>
-                                    <p>{vehicle.vehicleNumber}</p>
+                                    <p className="vehicleList-vehicleNumber">{vehicle.vehicleNumber}</p>
 
                                 </td>
                                 <td>
-                                    {vehicle.isApproved
-                                        ? <p>Approved</p>
+                                    {vehicle.isInShop
+                                        ? <p>True</p>
                                         : <p>False</p>
                                     }
 

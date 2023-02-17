@@ -23,6 +23,7 @@ namespace ReadyLine.Models
 
         public User User { get; set; }
         public Category Category { get; set; }
+        public List<ReportNote> Notes { get; set; }
         public Vehicle Vehicle { get; set; }
         public List<Tag> Tags { get; set; }
 

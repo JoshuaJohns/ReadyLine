@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { useNavigate } from "react-router-dom";
 import { register } from "../../models/authManager";
+import { addUser } from "../../models/userManager";
 
 export default function Register() {
     const navigate = useNavigate();
 
     const [firstName, setFirstName] = useState();
     const [lastName, setLastName] = useState();
-    const [hireDate, setHireDate] = useState();
+
     const [email, setEmail] = useState();
     const [imageUrl, setImageUrl] = useState();
     const [jobTitle, setJobTitle] = useState();
@@ -23,20 +24,24 @@ export default function Register() {
             const userProfile = {
                 firstName,
                 lastName,
-                hireDate,
+
                 imageUrl,
                 email,
                 jobTitle
+
             };
-            register(userProfile, password).then(() => navigate("/"));
+            register(userProfile, password)
+
+                .then(() => navigate("/"));
         }
     };
 
     return (
-        <Form onSubmit={registerClick}>
-            <fieldset>
+        <Form onSubmit={registerClick} className="Register_component">
+            <div className="Register_spacing"><p className="New_User">New User Registry</p></div>
+            <fieldset className="Register_fieldset">
                 <FormGroup>
-                    <Label htmlFor="firstName">First Name</Label>
+                    <Label htmlFor="firstName" className="firstName">First Name</Label>
                     <Input
                         id="firstName"
                         type="text"
@@ -44,23 +49,16 @@ export default function Register() {
                     />
                 </FormGroup>
                 <FormGroup>
-                    <Label htmlFor="lastName">Last Name</Label>
+                    <Label htmlFor="lastName" className="Register_fields">Last Name</Label>
                     <Input
                         id="lastName"
                         type="text"
                         onChange={(e) => setLastName(e.target.value)}
                     />
                 </FormGroup>
+
                 <FormGroup>
-                    <Label htmlFor="hireDate">Hire Date</Label>
-                    <Input
-                        id="hireDate"
-                        type="date"
-                        onChange={(e) => setHireDate(e.target.value)}
-                    />
-                </FormGroup>
-                <FormGroup>
-                    <Label for="email">Email</Label>
+                    <Label for="email" className="Register_fields">Email</Label>
                     <Input
                         id="email"
                         type="text"
@@ -68,7 +66,7 @@ export default function Register() {
                     />
                 </FormGroup>
                 <FormGroup>
-                    <Label for="jobTitle">Job Title</Label>
+                    <Label for="jobTitle" className="Register_fields">Job Title</Label>
                     <Input
                         id="jobTitle"
                         type="text"
@@ -76,7 +74,7 @@ export default function Register() {
                     />
                 </FormGroup>
                 <FormGroup>
-                    <Label htmlFor="imageUrl">Profile Image URL</Label>
+                    <Label htmlFor="imageUrl" className="Register_fields">Profile Image URL</Label>
                     <Input
                         id="imageUrl"
                         type="text"
@@ -84,7 +82,7 @@ export default function Register() {
                     />
                 </FormGroup>
                 <FormGroup>
-                    <Label for="password">Password</Label>
+                    <Label for="password" className="Register_fields">Password</Label>
                     <Input
                         id="password"
                         type="password"
@@ -92,7 +90,7 @@ export default function Register() {
                     />
                 </FormGroup>
                 <FormGroup>
-                    <Label for="confirmPassword">Confirm Password</Label>
+                    <Label for="confirmPassword" className="Register_fields">Confirm Password</Label>
                     <Input
                         id="confirmPassword"
                         type="password"
@@ -100,7 +98,7 @@ export default function Register() {
                     />
                 </FormGroup>
                 <FormGroup>
-                    <Button>Register</Button>
+                    <Button >Register</Button>
                 </FormGroup>
             </fieldset>
         </Form>

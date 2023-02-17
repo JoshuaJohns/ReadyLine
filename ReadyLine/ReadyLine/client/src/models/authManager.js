@@ -1,7 +1,9 @@
 import firebase from "firebase/app";
 import "firebase/auth";
+import { useNavigate } from "react-router-dom";
 
 const _apiUrl = "/api/user";
+
 
 const _doesUserExist = (firebaseUserId) => {
     return getToken().then((token) =>
@@ -15,14 +17,24 @@ const _doesUserExist = (firebaseUserId) => {
 
 const _saveUser = (user) => {
     return getToken().then((token) =>
-        fetch(_apiUrl, {
+        fetch(`${_apiUrl}/save`, {
             method: "POST",
             headers: {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(user)
-        }).then(resp => resp.json()));
+        }).then(resp => {
+            if (resp.ok) {
+                return resp.json();
+            } else if (resp.status === 401) {
+                throw new Error("Unauthorized");
+            } else {
+                throw new Error(
+                    "An unknown error occurred while trying to add User.",
+                );
+            }
+        }));
 };
 
 
@@ -49,7 +61,9 @@ export const login = (email, pw) => {
 
 
 export const logout = () => {
+
     firebase.auth().signOut()
+
 };
 
 
@@ -59,6 +73,7 @@ export const register = (user, password) => {
             ...user,
             firebaseUserId: createResponse.user.uid
         }));
+
 };
 
 

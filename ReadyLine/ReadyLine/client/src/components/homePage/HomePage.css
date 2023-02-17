@@ -25,8 +25,10 @@
 }
 
 .hompage-userImg {
-    border-radius: 80px;
+    border-radius: 100px;
     margin-left: 30px;
+    max-width: 200px;
+    max-height: 220px;
 }
 
 .homePage-readyLine-div {
@@ -73,7 +75,20 @@
     margin: 20px;
 }
 
+.yourVehicle-h2 {
+    margin-left: 20px;
+    font-weight: 648;
+    font-size: 35px;
+}
 
+.homePage-shopList-div {
+    padding: 30px;
+    padding-left: 120px;
+    background-color: rgba(103, 103, 103, 0.29);
+    border-radius: 9px;
+    width: 700px;
+
+}
 
 
 
@@ -85,6 +100,7 @@
     display: flex;
     flex-direction: column;
     float: right;
+    max-width: 700px;
 
 }
 
@@ -92,14 +108,13 @@
     display: flex;
     justify-content: space-between;
 
+
 }
 
-.homePage-shopList-div {
-    padding: 30px;
-    padding-left: 80px;
-    background-color: rgba(103, 103, 103, 0.29);
-    border-radius: 12px;
+.homePage-vehicle-card {
+    max-width: 400px;
 }
+
 
 .homePage-count-h3 {
     margin-left: 100px;
@@ -110,12 +125,14 @@
     margin-right: 40px;
     font-size: 20px;
 
+
 }
 
 .homePage-readyLine-table {
     /* background-color: rgba(16, 16, 16, 0.568); */
     background-color: rgba(103, 103, 103, 0.29);
-
+    min-width: 700px;
+    border-radius: 9px;
 }
 
 .home-readyLine-tr {
@@ -155,7 +172,34 @@
 
 
 /*---------------------------------Employee List-------------------------------------------*/
-.homePage-employeeList-Container {}
+.employeeList-search-div {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    max-width: 500px;
+}
+
+.input-find-home {
+    margin-left: 300px;
+    width: 325px;
+    height: 35px;
+    border-radius: 9px;
+    border-color: white;
+    margin-bottom: 20px;
+}
+
+.employeeList-h3 {
+    font-size: 35px;
+
+    margin-bottom: -55px;
+    width: 200px;
+}
+
+.homePage-employeeList-table {
+    background-color: rgba(0, 0, 0, 0.658);
+    color: aliceblue !important;
+    width: 770px !important;
+    border-radius: 9px;
+}
 
 .homePage-userList-img {
     height: 70px;
@@ -182,6 +226,12 @@
     font-weight: 500;
 }
 
+.homePage-userList-mechanic {
+    color: rgb(41, 139, 244);
+    font-weight: 500;
+
+}
+
 /*---------------------------------User Detail-------------------------------------------*/
 .userDetails-container {
     display: flex;
@@ -192,15 +242,17 @@
     min-height: 1200px;
 }
 
-.userDetails-subContainer {}
+.userDetails-subContainer {
+    padding-top: 70px;
+}
 
 .userDetails-cardOverlay {
     text-align: center;
+
 }
 
 .userDetails-userCardBody {
     font-size: 24px;
-
 }
 
 .userDetails-userCardBackgroundImg {
@@ -209,17 +261,43 @@
 
 .userDetails-userInfo-Card {
     max-width: 1000px;
+    background-color: rgba(24, 53, 53, 0.273);
+    padding: 50px;
+    border-radius: 9px;
+    box-shadow: 3px 3px 3px 3px;
+}
 
-
+.userDetails-userLi {
+    margin-top: 5px;
+    margin-bottom: 10px;
+    list-style: none;
+    font-weight: 500;
 }
 
 .userDetails-userCardImg {
-    padding-top: 20px;
+    border-radius: 100px;
     height: 200px;
     width: 200px;
 }
 
-.userDetails-userInfo-Card {}
+.userDetails-goBack-btn {
+    width: 200px;
+    margin-top: 20px;
+}
+
+.userDetails-edit-btn {
+    width: 200px;
+    margin-top: 20px;
+    margin-left: 20px;
+}
+
+.userDetails-vehicleLink {
+    list-style: none;
+    background-color: rgba(29, 28, 28, 0.872);
+    padding-left: 40px;
+    margin-right: 20px;
+    border-radius: 9px;
+}
 
 /*-----------------------------------edit Vehicle-----------------------------------*/
 .editVehicle-container {
@@ -235,4 +313,18 @@
     padding: 50px;
     font-size: 20px;
     font-weight: 500;
+}
+
+/*-----------------------------------edit Vehicle-----------------------------------*/
+.editUserForm {
+    min-width: 600px;
+    background-color: rgba(24, 53, 53, 0.273);
+    padding: 20px;
+}
+
+.editUser-div {
+    display: flex;
+    justify-content: space-around;
+    padding-top: 80px;
+
 }

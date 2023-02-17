@@ -1,7 +1,8 @@
 .vehiclePage-body {
-    background-color: rgba(24, 53, 53, 0.273);
+    background-color: rgb(179, 177, 177);
     height: auto;
     min-height: 1200px;
+
 }
 
 /*----------------------------------Add Vehicle-----------------------------------------*/
@@ -9,6 +10,15 @@
     padding-top: 1.5em;
     padding-left: 1.5em;
     padding-bottom: 1.5em;
+    margin-left: 100px;
+    margin-top: 10px;
+
+
+}
+
+.addVehicle-btn {
+    width: 200px;
+    margin-top: 30px;
 }
 
 .vehicleAddForm {
@@ -46,7 +56,8 @@
 
 /*----------------------------------Vehicle List-----------------------------------------*/
 .vehiclePage-search-div {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
+
 }
 
 .input-find {
@@ -60,13 +71,20 @@
 .vehiclePage-container {
     display: flex;
     flex-direction: column;
-    margin-left: 20px;
+    margin-left: 200px;
+    width: 900px;
 }
 
 
 .vehiclePage-table {
     background-color: rgb(247, 245, 242);
+    border-radius: 9px;
+    font-size: 19px;
 
+}
+
+.vehicleList-vehicleNumber {
+    margin-left: 40px;
 }
 
 .vehicle-img {
@@ -103,6 +121,8 @@
     width: 400px;
     margin: 50px;
     margin-top: 0;
+    margin-right: 60px;
+    font-size: 20px;
 }
 
 .vehicleDetails-card {

@@ -54,10 +54,13 @@ namespace ReadyLine.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                       SELECT *
+                       SELECT            v.Id, v.ImageLocation, v.IsApproved, v.IsClaimed, v.IsInShop, v.MileageAtPMService, v.VehicleNumber, v.VehicleTypeId, v.CurrentMileage,
+                                     r.Id as ReportId, r.CategoryId, r.DateCompleted, r.DateCreated, r.Issue, r.UserId, r.VehicleId,
+                                vt.Id, vt.Name
                          FROM Vehicle v
                             JOIN VehicleType vt on vt.Id = v.VehicleTypeId
-                        ORDER BY v.VehicleNumber
+                            LEFT JOIN Report r on r.VehicleId = v.Id
+                        ORDER BY  r.Id DESC
                               
                     ";
 
@@ -67,13 +70,58 @@ namespace ReadyLine.Repositories
 
                     while (reader.Read())
                     {
-                        vehicles.Add(NewVehicleFromReader(reader));
+                        var vehicletId = DbUtils.GetInt(reader, "Id");
+
+                        var existingVehicle = vehicles.FirstOrDefault(prop => prop.Id == vehicletId);
+                        if (existingVehicle == null)
+                        {
+                            existingVehicle = new Vehicle()
+                            {
+                                Id = reader.GetInt32(reader.GetOrdinal("Id")),
+
+                                MileageAtPMService = reader.GetInt32(reader.GetOrdinal("MileageAtPMService")),
+                                CurrentMileage = reader.GetInt32(reader.GetOrdinal("CurrentMileage")),
+                                VehicleNumber = reader.GetString(reader.GetOrdinal("VehicleNumber")),
+                                ImageLocation = reader.GetString(reader.GetOrdinal("ImageLocation")),
+                                IsApproved = reader.GetBoolean(reader.GetOrdinal("IsApproved")),
+                                IsClaimed = reader.GetBoolean(reader.GetOrdinal("IsClaimed")),
+                                IsInShop = reader.GetBoolean(reader.GetOrdinal("IsInShop")),
+                                VehicleTypeId = reader.GetInt32(reader.GetOrdinal("VehicleTypeId")),
+                                Reports = new List<Report>(),
+                                VehicleType = new VehicleType()
+                                {
+                                    Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                                    Name = reader.GetString(reader.GetOrdinal("Name")),
+
+                                },
+
+                            };
+
+
+                            vehicles.Add(existingVehicle);
+                        }
+                        if (DbUtils.IsNotDbNull(reader, "ReportId"))
+                        {
+                            existingVehicle.Reports.Add(
+                              new Report()
+                              {
+                                  Id = reader.GetInt32(reader.GetOrdinal("ReportId")),
+                           
+                                  Issue = reader.GetString(reader.GetOrdinal("Issue")),
+                                  DateCreated = reader.GetDateTime(reader.GetOrdinal("DateCreated")),
+                                  DateCompleted = DbUtils.GetNullableDateTime(reader, "DateCompleted"),
+                                  CategoryId = reader.GetInt32(reader.GetOrdinal("CategoryId")),
+                                  UserId = reader.GetInt32(reader.GetOrdinal("Id"))
+
+                              });
+
+
+                        }
                     }
-
                     reader.Close();
-
                     return vehicles;
                 }
+
             }
         }
 
@@ -124,6 +172,7 @@ namespace ReadyLine.Repositories
                             v.Id, v.ImageLocation, v.IsApproved, v.IsClaimed, v.IsInShop, v.MileageAtPMService, v.VehicleNumber, v.VehicleTypeId, v.CurrentMileage,
                             vt.Id, vt.Name,
                             r.Id as ReportId, r.CategoryId, r.DateCompleted, r.DateCreated, r.Issue, r.UserId, r.VehicleId,
+                             rn.Id as ReportNoteId, rn.Content,
                             u.FirstName, u.LastName,
                              t.Status, t.Id as TagId
                          FROM Vehicle v
@@ -131,6 +180,7 @@ namespace ReadyLine.Repositories
                        LEFT JOIN Report r on r.VehicleId = v.Id
                         LEFT JOIN [User] u on u.Id = r.UserId
                           LEFT JOIN ReportTag rt on rt.ReportId = r.Id
+                        LEFT JOIN ReportNote rn on rn.ReportId = r.Id
                     LEFT JOIN Tag t on t.Id = rt.TagId
                     WHERE v.Id = @Id
                     ORDER BY r.DateCreated DESC
@@ -155,16 +205,18 @@ namespace ReadyLine.Repositories
 
                             }
 
+                            int reportId = 0;
+                            if (DbUtils.IsNotDbNull(reader, "ReportId")) {
 
-
-                            var reportId = DbUtils.GetInt(reader, "ReportId");
+                             reportId = DbUtils.GetInt(reader, "ReportId");
+                            }
 
                             var existingReport = vehicle.Reports.FirstOrDefault(prop => prop.Id == reportId);
 
                             if (DbUtils.IsNotDbNull(reader, "ReportId") && existingReport == null)
                             {
-                                
-                              existingReport =  new Report()
+
+                                existingReport = new Report()
                                 {
                                     Id = reader.GetInt32(reader.GetOrdinal("ReportId")),
                                     Issue = reader.GetString(reader.GetOrdinal("Issue")),
@@ -172,6 +224,7 @@ namespace ReadyLine.Repositories
                                     DateCompleted = DbUtils.GetNullableDateTime(reader, "DateCompleted"),
                                     CategoryId = reader.GetInt32(reader.GetOrdinal("CategoryId")),
                                     Tags = new List<Tag>(),
+                                    Notes = new List<ReportNote>(),
                                     UserId = reader.GetInt32(reader.GetOrdinal("UserId")),
                                     User = new User()
                                     {
@@ -183,19 +236,45 @@ namespace ReadyLine.Repositories
                                 };
                                 vehicle.Reports.Add(existingReport);
                             }
+
+                            Tag existingTag = null;
+                            int tagId = 0;
                             if (DbUtils.IsNotDbNull(reader, "TagId"))
                             {
-                                existingReport.Tags.Add(
+
+                                tagId = DbUtils.GetInt(reader, "TagId");
+                            }
+
+                            if (reportId != 0)
+                            {
+
+                             existingTag = existingReport.Tags.FirstOrDefault(prop => prop.Id == tagId);
+                            }
+
+                            if (DbUtils.IsNotDbNull(reader, "TagId") && existingTag == null)
+                            {
+                                existingTag = 
                                   new Tag
                                   {
                                       Id = reader.GetInt32(reader.GetOrdinal("TagId")),
                                       Status = reader.GetString(reader.GetOrdinal("Status")),
 
+                                  };
+
+                                existingReport.Tags.Add(existingTag);
+                            }
+                            if (DbUtils.IsNotDbNull(reader, "ReportNoteId"))
+                            {
+                                existingReport.Notes.Add(
+                                  new ReportNote
+                                  {
+                                      Id = reader.GetInt32(reader.GetOrdinal("ReportNoteId")),
+                                      Content = reader.GetString(reader.GetOrdinal("Content")),
+
                                   });
 
 
                             }
-
                         }
 
                         return vehicle;

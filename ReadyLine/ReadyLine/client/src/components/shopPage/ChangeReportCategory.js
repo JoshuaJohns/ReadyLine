@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom";
 import { FormGroup, Input, Label } from "reactstrap";
-import { getAllCategories, putReport } from "../../models/reportManager";
+import { addReportNote, getAllCategories, putReport } from "../../models/reportManager";
 import { addVehicle, getAllVehicleTypes } from "../../models/vehicleManager";
 
 
@@ -13,6 +13,7 @@ export const ChangeReportCategory = ({ setNewVehicle, setAddedVehicle, report })
     const [categories, setCategories] = useState([])
     const [userChoices, update] = useState({
         categoryId: 0,
+        note: ""
     })
     const navigate = useNavigate()
 
@@ -29,10 +30,16 @@ export const ChangeReportCategory = ({ setNewVehicle, setAddedVehicle, report })
     // what we will send to the api
     const handleSubmitButton = (event) => {
         event.preventDefault()
+        const note = {
+            content: userChoices.note,
+            reportId: report.id,
+        }
         report.categoryId = userChoices.categoryId
-
+        report.notes.push(note)
+        if (note.content !== "") {
+            addReportNote(note)
+        }
         return putReport(report.id, report)
-
             .then((res) => {
                 setNewVehicle(false)
                 setAddedVehicle(true)
@@ -77,8 +84,57 @@ export const ChangeReportCategory = ({ setNewVehicle, setAddedVehicle, report })
                     })}
                 </Input>
             </FormGroup>
+
+            {
+                userChoices.categoryId == 5
+                    ?
+                    <>
+                        <FormGroup className="createReport-formGroup-issue">
+                            <div className="form-group">
+                                <label htmlFor="issue">Write Description of all work done to Vehicle: (Required)</label>
+                                <input
+                                    required autoFocus
+                                    type="text"
+                                    className="form-control"
+
+                                    value={userChoices.note}
+                                    onChange={
+                                        (evt) => {
+                                            const copy = { ...userChoices }
+                                            copy.note = (evt.target.value)
+                                            update(copy)
+                                        }
+                                    } />
+                            </div>
+                        </FormGroup>
+
+                    </>
+                    :
+                    <>
+                        <FormGroup className="createReport-formGroup-issue">
+                            <div className="form-group">
+                                <label htmlFor="issue">Add Note: (Optional)</label>
+                                <input
+
+                                    type="text"
+                                    className="form-control"
+
+                                    value={userChoices.note}
+                                    onChange={
+                                        (evt) => {
+                                            const copy = { ...userChoices }
+                                            copy.note = (evt.target.value)
+                                            update(copy)
+                                        }
+                                    } />
+                            </div>
+                        </FormGroup>
+                    </>
+            }
             <button
-                onClick={(clickEvent) => handleSubmitButton(clickEvent)}
+                onClick={(clickEvent) =>
+
+                    handleSubmitButton(clickEvent)}
                 className="btn-primary">
                 Submit Change
             </button>

@@ -11,5 +11,8 @@ namespace ReadyLine.Repositories
         void Update(Report report);
 
         List<Category> GetAllCategories();
+       void AddReportNote(ReportNote note);
+
+        List<ReportNote> GetNotes(int id);
     }
 }

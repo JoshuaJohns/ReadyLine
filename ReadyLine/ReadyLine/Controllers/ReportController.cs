@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using ReadyLine.Models;
@@ -8,6 +9,7 @@ using System.Security.Claims;
 
 namespace ReadyLine.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ReportController : ControllerBase
@@ -70,26 +72,55 @@ namespace ReadyLine.Controllers
             return Ok(report);
         }
 
+        [HttpGet("notes/{id}")]
+        public IActionResult GetNotesOnReport(int id)
+        {
+            var report = _reportRepository.GetNotes(id);
+            if (report == null)
+            {
+                return NotFound();
+            }
+            return Ok(report);
+        }
+
         [HttpPut("{id}")]
         public IActionResult Put(int id, Report report)
         {
+           
 
-            if (id != report.Id)
-            {
-                return BadRequest();
-            }
 
             if (report.CategoryId == 5)
             {
              var vehicle =   _vehicleRepository.GetById(report.VehicleId);
+                report.Tags.ForEach((tag) =>
+                {
+                    if (tag.Id == 1)
+                    {
+                        vehicle.MileageAtPMService = report.Vehicle.CurrentMileage;
+                    }
+                });
                 vehicle.IsApproved = true;
                 _vehicleRepository.Update(vehicle);
                 report.DateCompleted= DateTime.Now;
             }
-
+            
             _reportRepository.Update(report);
             return Ok(report);
         }
+
+        [HttpPost("reportNote")]
+        public IActionResult Post( ReportNote note)
+        {
+            var firebaseUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var user = _userRepository.GetByFirebaseUserId(firebaseUserId);
+
+                note.CreateDateTime = DateTime.Now;
+                note.UserId = user.Id;
+                _reportRepository.AddReportNote(note);
+            
+            return Ok(note);
+        }
+
 
 
 

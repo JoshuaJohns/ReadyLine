@@ -2,26 +2,63 @@
 .login-container {
     display: flex;
     justify-content: space-between;
+    background-color: rgb(179, 177, 177);
+    padding-bottom: 500px;
 }
 
 .login {
     width: 600px;
-    background-color: rgba(28, 29, 29, 0.285);
+    background-color: rgba(98, 98, 98, 0.285);
     padding: 50px;
     display: flex;
     justify-content: space-around;
     margin-top: 100px;
-
+    border-radius: 9px;
+    box-shadow: 3px 3px 3px 3px;
 }
 
+/*----------------------------Register---------------------------*/
+.Register_component {
+    background-color: rgb(179, 177, 177);
+    padding-bottom: 200px;
+    /* margin-top: -100px; */
+}
 
+.Register_fieldset {
+    margin-left: 500px;
+    margin-right: 500px;
+    padding-left: 100px;
+    padding-right: 100px;
+    margin-bottom: -1cm;
+    background-color: rgba(98, 98, 98, 0.285);
+    border-radius: 9px;
+    box-shadow: 3px 3px 3px 3px;
+}
+
+.Register_spacing {
+    font-size: 1cm;
+    display: flex;
+    justify-content: center;
+    font-weight: bold;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.Register_fields {
+    font-weight: bold;
+}
+
+.firstName {
+    padding-top: 10px;
+    font-weight: bold;
+}
 
 /*----------------------------NavBar---------------------------*/
 
 
 .navbar {
     background-color: rgba(227, 228, 232, 0.964);
-    height: 65px;
+    height: 63px;
     font-weight: 700;
     color: aliceblue !important;
     font-size: 20px;
@@ -35,4 +72,11 @@
 .navLink {
     margin-left: 20px;
     color: rgba(213, 217, 220, 0.975);
+}
+
+.Logo {
+    width: 60px;
+    height: 60px;
+    margin-right: 20px;
+    margin-left: 10px;
 }

@@ -15,14 +15,14 @@ namespace ReadyLine.Models
         public string FirstName { get; set; }
         [Required]
         public string LastName { get; set; }
-        [Required]
+     
         public string ImageUrl { get; set; }
 
         public DateTime CreatedDate { get; set; }
         public DateTime? HireDate { get; set; }
-        [Required]
+        
         public string JobTitle { get; set; }
-        [Required]
+        
         public int UserTypeId { get; set; }
 
         public UserType UserType { get; set; }

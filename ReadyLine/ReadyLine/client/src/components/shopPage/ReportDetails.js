@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Card, CardTitle, CardSubtitle, CardBody, CardText, Button, Popover, PopoverHeader, PopoverBody } from "reactstrap";
-import { getReportById } from "../../models/reportManager";
+import { getNotesOnReport, getReportById } from "../../models/reportManager";
 import { getCurrentUserInfo } from "../../models/userManager";
 import { deleteVehicle, getVehicleById } from "../../models/vehicleManager";
 import { ChangeReportCategory } from "./ChangeReportCategory";
@@ -11,6 +11,7 @@ import "./ShopPage.css"
 export default function ReportDetails() {
     const [autrhorized, setAuthorized] = useState(false);
     const [report, setReport] = useState({})
+    const [notes, setNotes] = useState([])
     const [user, setUser] = useState({})
     const [newVehicle, setNewVehicle] = useState(false);
     const [addedVehicle, setAddedVehicle] = useState(false);
@@ -19,6 +20,9 @@ export default function ReportDetails() {
 
     const getReport = (id) => {
         getReportById(id).then(report => setReport(report));
+    }
+    const getReportNotes = (id) => {
+        getNotesOnReport(id).then(notes => setNotes(notes));
     }
     const getUser = () => {
         getCurrentUserInfo().then((user) => {
@@ -36,6 +40,7 @@ export default function ReportDetails() {
     useEffect(() => {
         getReport(id)
         getUser()
+        getReportNotes(id)
     }, [])
 
 
@@ -61,10 +66,17 @@ export default function ReportDetails() {
                 <h3>Tags</h3>
                 <ul>
                     {report?.tags?.map((tag) => {
-                        return <li>{tag.status}</li>
+                        return <li key={tag.id}>{tag.status}</li>
                     })}
 
                 </ul>
+                <h3>Notes</h3>
+                <ol>
+                    {notes.map((note) => {
+                        return <li key={note.id}>{note.content}</li>
+                    })}
+
+                </ol>
             </CardBody>
 
 

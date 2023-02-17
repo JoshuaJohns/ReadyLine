@@ -12,5 +12,6 @@ namespace ReadyLine.Repositories
         User GetById(int id);
         User GetUserProfileByIdWithComentsAndVideos(int id);
         void Update(User profile);
+        List<UserType> GetAllUserTypes();
     }
 }

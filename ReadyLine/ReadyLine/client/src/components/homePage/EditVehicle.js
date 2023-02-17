@@ -1,9 +1,6 @@
 import { useState, useEffect } from "react"
 import { useNavigate, useParams } from "react-router-dom";
-import { FormGroup, Input, Label } from "reactstrap";
-import { getAlluser, putReport } from "../../models/reportManager";
-import { getUserById, putUserInfo } from "../../models/userManager";
-import { addVehicle, getAllVehicleTypes, getVehicleById, putVehicle } from "../../models/vehicleManager";
+import { getVehicleById, putVehicle } from "../../models/vehicleManager";
 
 
 
@@ -13,8 +10,11 @@ export const EditVehicle = () => {
 
     const [vehcle, setVehicle] = useState({})
     const [userChoices, update] = useState({
-        currentMileage: vehcle.currentMileage,
+        currentMileage: 0
     })
+
+
+
     const navigate = useNavigate()
     const { id } = useParams()
 
@@ -33,9 +33,20 @@ export const EditVehicle = () => {
     // what we will send to the api
     const handleSubmitButton = (event) => {
         event.preventDefault()
-        vehcle.currentMileage = userChoices.currentMileage
+        const vehicleToSendToApi = {
+            currentMileage: userChoices.currentMileage,
+            id: vehcle.id,
+            vehicleTypeId: vehcle.vehicleTypeId,
+            mileageAtPMService: vehcle.mileageAtPMService,
+            imageLocation: vehcle.imageLocation,
+            vehicleNumber: vehcle.vehicleNumber,
+            isApproved: vehcle.isApproved,
+            isInShop: vehcle.isInShop,
+            isClaimed: vehcle.isClaimed
 
-        return putVehicle(vehcle.id, vehcle)
+        }
+
+        return putVehicle(id, vehicleToSendToApi)
 
             .then((res) => {
                 window.alert(`Report #${vehcle.id} has been succesfuly updated :)`)
@@ -60,7 +71,7 @@ export const EditVehicle = () => {
                             required autoFocus
                             type="number"
                             className="form-control"
-                            placeholder={vehcle.currentMileage}
+
                             value={userChoices.currentMileage}
                             onChange={
                                 (evt) => {

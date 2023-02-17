@@ -53,6 +53,11 @@ namespace ReadyLine.Controllers
             return Ok(_userRepository.GetAll());
         }
 
+        [HttpGet("userTypes")]
+        public IActionResult GetAllUserTypes()
+        {
+            return Ok(_userRepository.GetAllUserTypes());
+        }
 
         [HttpGet("currentUser")]
         public IActionResult GetCurrentUserInfo()
@@ -93,7 +98,8 @@ namespace ReadyLine.Controllers
 
 
 
-        [HttpPost]
+        [HttpPost("save")]
+
         public IActionResult Post(User userProfile)
         {
             
@@ -101,7 +107,7 @@ namespace ReadyLine.Controllers
             userProfile.UserTypeId = UserType.EMPLOYEE_ID;
             if (userProfile.ImageUrl == null)
             {
-                userProfile.ImageUrl = "https://beardstrashservice.com/wp-content/uploads/2023/01/Logo-637x266.gif";
+                userProfile.ImageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQx9tjaExsY-srL4VsHNE_OKGVCJ-eIFNBktw&usqp=CAU";
             }
             _userRepository.Add(userProfile);
             return CreatedAtAction("Get", new { id = userProfile.Id }, userProfile);
@@ -116,7 +122,7 @@ namespace ReadyLine.Controllers
             }
 
             _userRepository.Update(profile);
-            return NoContent();
+            return Ok(profile);
         }
 
 

@@ -73,10 +73,15 @@ namespace ReadyLine.Controllers
 
 
         }
-
+        [Authorize]
         [HttpPost]
         public IActionResult Post(Vehicle vehicle)
         {
+            var firebaseUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var user = _userRepository.GetByFirebaseUserId(firebaseUserId);
+
+            if (user.UserTypeId == 2)
+            {
             vehicle.IsApproved = true;
             vehicle.IsClaimed = false;
             vehicle.IsInShop = false;
@@ -90,13 +95,20 @@ namespace ReadyLine.Controllers
             }
             else
             {
-                vehicle.ImageLocation = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlztq3gFba-rcamYzjAcZXfMcJVnWCU0jE1g&usqp=CAU";
+                vehicle.ImageLocation = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmGPsmNOr9fK87uOYVdBahSgjpZf4fggP7aWWrWEFWKxo3kGF39tSHlwt85Z_oIF7WJoQ&usqp=CAU";
             }
 
 
             _vehicleRepository.Add(vehicle);
 
             return Ok(vehicle);
+
+
+            }
+            else
+            {
+                return NoContent();
+            }
 
 
         }

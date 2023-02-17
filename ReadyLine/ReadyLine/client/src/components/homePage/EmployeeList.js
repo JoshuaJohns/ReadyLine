@@ -9,10 +9,12 @@ import "./HomePage.css"
 
 const EmployeeList = () => {
     const [users, setUsers] = useState([]);
+    const [filteredUsers, setFilteredUsers] = useState([]);
     const [vehicleId, setVehicleId] = useState(null);
     const [newVehicle, setNewVehicle] = useState(false);
     const [addedVehicle, setAddedVehicle] = useState(false);
     const [basic, setBasic] = useState(false);
+    const [searchTerm, setSeach] = useState('');
 
     const navigate = useNavigate()
 
@@ -20,7 +22,12 @@ const EmployeeList = () => {
 
     //Get Methods
     const getUsers = () => {
-        getAllUsers().then(users => setUsers(users));
+        getAllUsers().then(users => {
+            users.map((user) => {
+                user.fullName = (`${user.firstName} ${user.lastName}`)
+            })
+            setUsers(users)
+        });
 
     }
 
@@ -32,6 +39,14 @@ const EmployeeList = () => {
     useEffect(() => {
         getUsers();
     }, [addedVehicle]);
+
+    useEffect(
+        () => {
+            const searchedUser = users.filter(user => {
+                return user.fullName.toLowerCase().startsWith(searchTerm.toLowerCase())
+            })
+            setFilteredUsers(searchedUser)
+        }, [searchTerm, users])
 
     /*----------------------------------Buttons----------------------------------------------------*/
     const handleClaimButton = (event, vehicleId) => {
@@ -52,8 +67,19 @@ const EmployeeList = () => {
 
     return (<>
 
-
         <div className="homePage-employeeList-container">
+            <div className="employeeList-search-div">
+
+                <h3 className="employeeList-h3">Employees</h3>
+            </div>
+            <input className="input-find-home"
+                onChange={
+                    (event) => {
+                        setSeach(event.target.value)
+                    }
+                }
+                type="text" placeholder="Search by Name" />
+
 
 
             <Table className="homePage-employeeList-table">
@@ -72,7 +98,7 @@ const EmployeeList = () => {
 
                 <tbody>
 
-                    {users.map((user) => {
+                    {filteredUsers.map((user) => {
                         return <tr className="user-tr" key={user.id}>
                             <th className="user-th" scope="row">
 
@@ -93,9 +119,15 @@ const EmployeeList = () => {
 
 
                             {
-                                user.userTypeId == 1
-                                    ? <td className="homePage-userList-basic">Basic</td>
-                                    : <td className="homePage-userList-admin">Admin</td>
+                                user.userTypeId == 2
+                                    ? <td className="homePage-userList-admin">Admin</td>
+                                    :
+                                    user.userTypeId == 3
+                                        ?
+                                        <td className="homePage-userList-mechanic">Mechanic</td>
+
+                                        :
+                                        <td className="homePage-userList-basic">Basic</td>
                             }
 
 

@@ -17,9 +17,11 @@ export default function Header({ isLoggedIn }) {
     const [isOpen, setIsOpen] = useState(false);
     const toggle = () => setIsOpen(!isOpen);
 
+
     return (
         <div>
             <Navbar className="navbar" light expand="md">
+                <img className="Logo" src="/images/Ready-Line.Logo.PNG" alt="image"></img>
                 <NavbarBrand className="navBrand" tag={RRNavLink} to="/">
                     Ready Line
                 </NavbarBrand>
@@ -58,15 +60,17 @@ export default function Header({ isLoggedIn }) {
                         {isLoggedIn && (
                             <>
                                 <NavItem className="navLink" >
-                                    <a
+                                    <NavLink
                                         aria-current="page"
-
+                                        tag={RRNavLink} to="/login"
                                         className="nav-link"
                                         style={{ cursor: "pointer" }}
                                         onClick={logout}
+
+
                                     >
                                         Logout
-                                    </a>
+                                    </NavLink>
                                 </NavItem>
                             </>
                         )}

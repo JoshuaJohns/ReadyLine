@@ -86,12 +86,12 @@ export const CreateReport = () => {
                             }}
                     > <option>Select By Vehicle Number</option>
                         {vehicles.map((vehicle) => {
-                            if (vehicle.isApproved == true)
-                                return <option key={vehicle.id} value={vehicle.id}>
+                            if (vehicle.isApproved == true && vehicle.isInShop == false)
+                                return (<option key={vehicle.id} value={vehicle.id}>
                                     {vehicle.vehicleNumber}--
                                     {vehicle?.vehicleType?.name}
 
-                                </option>
+                                </option>)
                         })}
                     </Input>
                 </FormGroup>
@@ -119,9 +119,10 @@ export const CreateReport = () => {
 
                 <FormGroup check className="createReport-formGroup-checkBox">
                     {tags.map((tag) => {
-                        return <div className="createReport-div-checkBox">
-                            <Label className="createReport-label-checkBox" check key={tag.id}>
+                        return (<div className="createReport-div-checkBox" key={tag.id}>
+                            <Label className="createReport-label-checkBox" >
                                 <Input
+
                                     className="createReport-input-checkBox"
                                     type="checkbox"
                                     checked={userChoices?.tags?.includes(tag.id)}
@@ -143,7 +144,7 @@ export const CreateReport = () => {
                                 {tag.status}
                             </Label>
 
-                        </div>
+                        </div>)
 
                     })}
                 </FormGroup>
