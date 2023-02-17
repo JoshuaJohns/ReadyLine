@@ -101,9 +101,10 @@ export const CreateReport = () => {
                     <div className="form-group">
                         <label htmlFor="issue">Describe the Issue(s):</label>
                         <input
-                            required autoFocus
+
                             type="text"
                             className="form-control"
+
                             placeholder="issue"
                             value={userChoices.issue}
                             onChange={
@@ -159,7 +160,7 @@ export const CreateReport = () => {
                 <button
                     onClick={(clickEvent) => navigate("/report")}
                     className="btn-primary">
-                    Cancle
+                    Cancel
                 </button>
 
 

@@ -160,8 +160,8 @@ const VehicleList = (terms) => {
                                 </td>
                                 <td>
                                     {vehicle.isInShop
-                                        ? <p>True</p>
-                                        : <p>False</p>
+                                        ? <p className="inShop-true">True</p>
+                                        : <p className="inShop-false">False</p>
                                     }
 
                                 </td>

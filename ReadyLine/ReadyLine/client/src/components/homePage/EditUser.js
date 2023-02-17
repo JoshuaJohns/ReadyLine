@@ -174,7 +174,7 @@ export const EditUser = () => {
             <button
                 onClick={() => navigate(`/user/${user.id}`)}
                 className="btn-primary">
-                Cancle
+                Cancel
             </button>
 
 

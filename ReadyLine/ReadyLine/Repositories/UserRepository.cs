@@ -286,30 +286,7 @@ namespace ReadyLine.Repositories
 
                             }
 
-                            if (DbUtils.IsNotDbNull(reader, "VideoId"))
-                            {
-                                //profile.Videos.Add(new Video()
-                                //{
-                                //    Id = DbUtils.GetInt(reader, "VideoId"),
-                                //    Title = DbUtils.GetString(reader, "Title"),
-                                //    Description = DbUtils.GetString(reader, "Description"),
-                                //    CreatedDate = DbUtils.GetDateTime(reader, "VideoCreatedDate"),
-                                //    Url = DbUtils.GetString(reader, "Url"),
-                                //    UserProfileId = DbUtils.GetInt(reader, "VideoUserProfileId"),
-
-                                //});
-                            }
-
-                            if (DbUtils.IsNotDbNull(reader, "CommentId"))
-                            {
-                                //profile.Comments.Add(new Comment()
-                                //{
-                                //    Id = DbUtils.GetInt(reader, "CommentId"),
-                                //    Message = DbUtils.GetString(reader, "Message"),
-                                //    VideoId = DbUtils.GetInt(reader, "CommentVideoId"),
-                                //    UserProfileId = DbUtils.GetInt(reader, "CommentUserProfileId")
-                                //});
-                            }
+                           
 
                         }
                         return profile;

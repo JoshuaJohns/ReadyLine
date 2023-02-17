@@ -141,7 +141,7 @@ export const ChangeReportCategory = ({ setNewVehicle, setAddedVehicle, report })
             <button
                 onClick={() => setNewVehicle(false)}
                 className="btn-primary">
-                Cancle
+                Cancel
             </button>
 
 

@@ -91,7 +91,7 @@ export const EditVehicle = () => {
                 <button
                     onClick={() => navigate("/")}
                     className="btn-primary">
-                    Cancle
+                    Cancel
                 </button>
 
 

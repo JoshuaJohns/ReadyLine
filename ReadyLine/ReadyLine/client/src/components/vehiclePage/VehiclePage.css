@@ -110,8 +110,15 @@
     color: green
 }
 
+.inShop-true {
+    /* color: rgb(125, 111, 2); */
+    color: rgb(192, 3, 3);
+}
 
-
+.inShop-false {
+    /* color: rgb(0, 6, 128); */
+    color: green
+}
 
 
 /*----------------------------------Vehicle Details-----------------------------------------*/

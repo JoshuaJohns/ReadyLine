@@ -48,6 +48,13 @@
 }
 
 /*---------------------------------Your Vehicle-------------------------------------------*/
+
+.vehiclePage-container-home {
+    display: flex;
+    flex-direction: column;
+
+}
+
 .homePage-vehicle-card {
     margin-bottom: 10px;
     margin-right: 60px;
@@ -76,9 +83,10 @@
 }
 
 .yourVehicle-h2 {
-    margin-left: 20px;
+    margin-left: 0px;
     font-weight: 648;
     font-size: 35px;
+
 }
 
 .homePage-shopList-div {
@@ -101,7 +109,7 @@
     flex-direction: column;
     float: right;
     max-width: 700px;
-
+    margin-right: 40px;
 }
 
 .homePage-count-div {

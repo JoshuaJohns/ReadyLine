@@ -263,16 +263,31 @@ namespace ReadyLine.Repositories
 
                                 existingReport.Tags.Add(existingTag);
                             }
+
+                            ReportNote existingNote = null;
+                            int noteId = 0;
                             if (DbUtils.IsNotDbNull(reader, "ReportNoteId"))
                             {
-                                existingReport.Notes.Add(
+
+                                noteId = DbUtils.GetInt(reader, "ReportNoteId");
+                            }
+
+                            if (reportId != 0)
+                            {
+
+                                existingNote = existingReport.Notes.FirstOrDefault(prop => prop.Id == noteId);
+                            }
+
+                            if (DbUtils.IsNotDbNull(reader, "ReportNoteId") && existingNote == null)
+                            {
+                                existingNote =
                                   new ReportNote
                                   {
                                       Id = reader.GetInt32(reader.GetOrdinal("ReportNoteId")),
                                       Content = reader.GetString(reader.GetOrdinal("Content")),
 
-                                  });
-
+                                  };
+                                existingReport.Notes.Add(existingNote);
 
                             }
                         }
