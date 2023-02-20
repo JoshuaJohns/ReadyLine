@@ -20,6 +20,7 @@
 
 1. In `client` directory run `npx create-react-app .`
 1. Install firebase and react router using `npm install react-router-dom@5.2.0 firebase@8.7.1`
+2. Install reactstrap using 'npm install --save bootstrap reactstrap'
 
 > **NOTE:** When running this app run the back end server first then run `npm start` inside the `client` directory in the repo.
 
