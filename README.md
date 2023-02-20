@@ -30,7 +30,7 @@ Upon serving the correct hosts through your browser, you will be prompted with a
 
 After creating your account, you will notice 4 nav bar selections allowing users to navigate to Home, Vehicles, shop, or  logout.
 
-You can begin begin by navigateing to Vehicles and inspect a list of all vehiles in the system where you can also view a clicked upon vehicles details and claim any vehicle that is not already claimed by a user.
+You can begin by navigateing to Vehicles and inspect a list of all vehicles in the system where you can also view a clicked upon vehicle's details and claim any vehicle that is not already claimed by a user.
 
 Once you have have claimed a new Vehicle using the green `Claim` button it will populate under the `Home` link in the navbar. The Home page will now display your claimed vehicles under the title 'Your Vehicles...'. Under the title 'Ready For Pickup' is a list of Vehicles that are ready for pick up from the shop. On the left side of the page you will see information of the current user at the top and below will be a list of all the users in the system where you can view each user's information.
 
