@@ -15,6 +15,7 @@ const VehicleList = (terms) => {
     const [newVehicle, setNewVehicle] = useState(false);
     const [addedVehicle, setAddedVehicle] = useState(false);
     const [authorized, setAuthorized] = useState(false);
+    const [unClaimed, setUnClaimed] = useState(false);
     const [searchTerm, setSeach] = useState('');
     const [currentUser, setCurrentUser] = useState({});
 
@@ -55,6 +56,21 @@ const VehicleList = (terms) => {
             setFilteredVehicles(searchedVehicles)
         }, [searchTerm, vehicles]
     )
+    useEffect(
+        () => {
+            if (unClaimed) {
+                const unClaimedVehicles = vehicles.filter(vehicle => vehicle.isClaimed === false)
+                setFilteredVehicles(unClaimedVehicles)
+
+            }
+            else {
+                setFilteredVehicles(vehicles)
+
+            }
+
+        }, [unClaimed]
+    )
+
     /*----------------------------------Buttons----------------------------------------------------*/
     const handleClaimButton = (event, vehicleId) => {
         event.preventDefault()
@@ -100,6 +116,16 @@ const VehicleList = (terms) => {
         </div>
         <div className="vehiclePage-container">
             <div className="vehiclePage-search-div">
+                <Button color="dark" className="unclaimed-btns" onClick={(clickEvent) => {
+                    setUnClaimed(true)
+                }}>
+                    Un Claimed Vehicles
+                </Button>
+                <Button color="dark" className="unclaimed-btns" onClick={(clickEvent) => {
+                    setUnClaimed(false)
+                }}>
+                    All Vehicles
+                </Button>
                 <input
 
                     className="input-find"

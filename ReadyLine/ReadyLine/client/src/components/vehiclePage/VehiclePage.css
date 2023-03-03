@@ -57,7 +57,14 @@
 /*----------------------------------Vehicle List-----------------------------------------*/
 .vehiclePage-search-div {
     margin-bottom: 20px;
+    display: flex;
 
+}
+
+.unclaimed-btns {
+    width: 200px;
+    height: 60px;
+    margin-left: 10px;
 }
 
 .input-find {
