@@ -59,6 +59,14 @@ namespace ReadyLine.Controllers
             return Ok(_userRepository.GetAllUserTypes());
         }
 
+
+        [HttpGet("adminRequestTypes")]
+        public IActionResult GetAllAdminRequestTypes()
+        {
+            return Ok(_userRepository.GetAllAdminRequestTypes());
+        }
+
+
         [HttpGet("currentUser")]
         public IActionResult GetCurrentUserInfo()
         {

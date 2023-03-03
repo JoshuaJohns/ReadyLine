@@ -105,6 +105,43 @@ namespace ReadyLine.Repositories
             }
         }
 
+
+        public List<AdminRequestType> GetAllAdminRequestTypes()
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+               SELECT *
+                 FROM [AdminRequestType]  
+            
+            ";
+
+                    var reader = cmd.ExecuteReader();
+
+                    var requestTypes = new List<AdminRequestType>();
+
+                    while (reader.Read())
+                    {
+                        requestTypes.Add(
+                            new AdminRequestType()
+                            {
+                                Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                                Type = reader.GetString(reader.GetOrdinal("Type"))
+                            }
+                            );
+                    }
+
+                    reader.Close();
+
+                    return requestTypes;
+                }
+            }
+        }
+
+
         public User GetByFirebaseUserId(string firebaseUserId)
         {
             using (var conn = Connection)

@@ -53,6 +53,22 @@ export const getAllUserTypes = () => {
         });
     });
 };
+export const getAllAdminRequestTypes = () => {
+    return getToken().then((token) => {
+        return fetch(`${_apiUrl}/adminRequestTypes`, {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }).then((res) => {
+            if (res.ok) {
+                return res.json();
+            } else {
+                throw new Error("An unknown error occurred while trying to get adminRequestTypes.");
+            }
+        });
+    });
+};
 
 export const putUserInfo = (id, user) => {
     return getToken().then((token) => {

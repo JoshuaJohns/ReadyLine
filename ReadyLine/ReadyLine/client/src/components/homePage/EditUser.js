@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import { useNavigate, useParams } from "react-router-dom";
 import { FormGroup, Input, Label } from "reactstrap";
 
-import { getAllUserTypes, getUserById, putUserInfo } from "../../models/userManager";
+import { getAllAdminRequestTypes, getAllUserTypes, getUserById, putUserInfo } from "../../models/userManager";
 
 
 
@@ -13,6 +13,8 @@ export const EditUser = () => {
 
 
     const [userTypes, setUserTypes] = useState([])
+    const [adminRequest, updateAdminRequest] = useState([])
+    const [adminRequestType, setAdminRequestType] = useState([])
     const [user, updateUser] = useState({
         // firstName: "",
         // lastName: "",
@@ -32,10 +34,14 @@ export const EditUser = () => {
     const getUserType = () => {
         getAllUserTypes().then(type => setUserTypes(type));
     };
+    const getAdminRequestTypes = () => {
+        getAllAdminRequestTypes().then(type => setAdminRequestType(type));
+    };
 
     useEffect(() => {
         getuser()
         getUserType()
+        getAdminRequestTypes()
     }, []);
 
 
@@ -159,6 +165,36 @@ export const EditUser = () => {
 
                         return (<option key={type.id} value={type.id}>
                             {type.name}
+
+                        </option>)
+                    })}
+                </Input>
+            </FormGroup>
+
+
+            <FormGroup className="createReport-formGroup">
+                <Label
+                    className="createReport-label"
+                    for="exampleSelect"
+                    sm={2}
+                >
+                    Authentication Level
+                </Label>
+                <Input
+                    type="select"
+
+                    value={adminRequestType.id}
+                    onChange={
+                        (evt) => {
+                            const copy = { ...adminRequest }
+                            copy.id = parseInt((evt.target.value))
+                            updateAdminRequest(copy)
+                        }}
+                > <option>Select Level</option>
+                    {adminRequestType.map((type) => {
+
+                        return (<option key={type.id} value={type.id}>
+                            {type.type}
 
                         </option>)
                     })}
